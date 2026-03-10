@@ -1,6 +1,6 @@
 {
   "name": "@monxterlab/cccli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Claude Code CLI configuration management tool",
   "main": "dist/index.js",
   "bin": {

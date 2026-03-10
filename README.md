@@ -5,8 +5,6 @@
 **简化 Claude CLI 配置管理，让多环境切换更轻松**
 
 [![Version](https://img.shields.io/npm/v/@monxterlab/cccli)](https://www.npmjs.com/package/@monxterlab/cccli)
-[![License](https://img.shields.io/npm/v/@monxterlab/cccli)](LICENSE)
-[![Downloads](https://img.shields.io/npm/v/@monxterlab/cccli)](https://www.npmjs.com/package/@monxterlab/cccli)
 
 [English](#english) | [中文](#中文)
 
