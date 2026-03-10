@@ -98,6 +98,9 @@ jspm_packages/
 .tern-port
 
 # other folder
-req/
 .qoder/
+.claude
 specs/
+req/
+
+package-lock.json

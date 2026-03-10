@@ -13,8 +13,11 @@ export function helpCommand(): void {
   console.log('              --unset <proxy_name>         清除代理环境变量');
   console.log('  completion  <shell>                      生成 Shell 补全脚本');
   console.log('  q           <template> <auth_key>       快速配置环境');
-  console.log('              --list                       列出可用模板');
+  console.log('              --list, -l                   列出可用模板');
   console.log('              --init                       初始化默认模板');
+  console.log('              --init --force               强制覆盖现有配置');
+  console.log('              (无参数)                    交互式配置模式');
+  console.log('  export      [json]                     导出配置为JSON格式');
   console.log('  unset       <config_name> [--force]      删除指定配置');
   console.log('  upgrade                                  更新到最新版本');
   console.log('  help 或 ?                                显示帮助信息');
@@ -32,6 +35,8 @@ export function helpCommand(): void {
   console.log('  cc proxy --unset http_proxy');
   console.log('  cc q kimi_coding sk-xxxxx');
   console.log('  cc q --list');
+  console.log('  cc q --init --force');
+  console.log('  cc export json');
   console.log('  cc unset kimi');
   console.log('  cc unset kimi --force');
   console.log('  cc completion bash');
