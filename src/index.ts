@@ -13,6 +13,7 @@ import { completionCommand } from './commands/completion';
 import { quickCommand } from './commands/quick';
 import { unsetCommand } from './commands/unset';
 import { upgradeCommand } from './commands/upgrade';
+import { exportCommand } from './commands/export';
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
@@ -66,6 +67,10 @@ async function main(): Promise<void> {
       quickCommand(commandArgs);
       break;
 
+    case 'export':
+      exportCommand(commandArgs);
+      break;
+
     case 'unset':
       await unsetCommand(commandArgs);
       break;
@@ -77,7 +82,7 @@ async function main(): Promise<void> {
     default:
       console.error(`错误: 未知命令 "${command}"`);
       console.error('');
-      console.error('可用命令: set, active, list, get, env, proxy, completion, q, unset, upgrade, help');
+      console.error('可用命令: set, active, list, get, env, proxy, completion, q, unset, export, upgrade, help');
       console.error('运行 "cc help" 或 "cc ?" 查看详细帮助');
       process.exit(1);
   }

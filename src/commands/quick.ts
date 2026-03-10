@@ -58,12 +58,104 @@ function showUsage(): void {
 }
 
 /**
+ * 交互式选择配置模板
+ */
+function interactiveSelect(): void {
+  const configs = readQuickConfigs();
+  const templates = Object.entries(configs.templates);
+
+  if (templates.length === 0) {
+    console.log('暂无可用模板');
+    return;
+  }
+
+  console.log('可用的快捷配置模板:');
+  templates.forEach(([name, template], index) => {
+    console.log(`  ${index + 1}. ${name}`);
+    console.log(`     ${template.baseUrl}`);
+  });
+
+  console.log('');
+
+  // 使用简单的readline实现交互
+  const readline = require('readline');
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  rl.question('请选择模板名称 (输入数字或名称): ', (input: string) => {
+    rl.close();
+
+    let templateName: string;
+
+    // 尝试解析数字选择
+    const numInput = parseInt(input.trim());
+    if (!isNaN(numInput) && numInput >= 1 && numInput <= templates.length) {
+      templateName = templates[numInput - 1][0];
+    } else {
+      // 直接使用输入的名称
+      templateName = input.trim();
+    }
+
+    // 检查模板是否存在
+    if (!templateExists(templateName)) {
+      console.error(`错误: 模板 "${templateName}" 不存在`);
+      return;
+    }
+
+    // 获取模板信息
+    const template = getTemplate(templateName);
+    if (!template) {
+      console.error(`错误: 无法读取模板 "${templateName}"`);
+      return;
+    }
+
+    // 提示输入API密钥
+    rl.question(`请输入 ${templateName} 的 API 密钥: `, (authKey: string) => {
+      rl.close();
+
+      if (!authKey.trim()) {
+        console.error('错误: API密钥不能为空');
+        return;
+      }
+
+      // 检查认证冲突
+      const conflictKey = checkAuthConflict(templateName, template.authKey);
+      if (conflictKey) {
+        console.error(`错误: 认证方式冲突`);
+        console.error('');
+        console.error(`当前配置已存在 "${conflictKey}"，无法设置 "${template.authKey}"`);
+        console.error('ANTHROPIC_AUTH_TOKEN 和 ANTHROPIC_API_KEY 只能选择一个使用');
+        return;
+      }
+
+      try {
+        // 设置 ANTHROPIC_BASE_URL
+        addConfigItem(templateName, 'ANTHROPIC_BASE_URL', template.baseUrl);
+        console.log(`✅ 已设置: ${templateName}.ANTHROPIC_BASE_URL = ${template.baseUrl}`);
+
+        // 设置认证 key
+        addConfigItem(templateName, template.authKey, authKey);
+        console.log(`✅ 已设置: ${templateName}.${template.authKey} = ${maskSensitiveValue(authKey)}`);
+
+        console.log('');
+        console.log(`配置 "${templateName}" 已完成！`);
+        console.log(`使用 "cc active ${templateName}" 激活此配置`);
+      } catch (error) {
+        console.error('设置配置失败:', error);
+      }
+    });
+  });
+}
+
+/**
  * 快速配置命令入口
  */
 export function quickCommand(args: string[]): void {
-  // 无参数，显示使用说明
+  // 无参数，进入交互模式
   if (args.length === 0) {
-    showUsage();
+    interactiveSelect();
     return;
   }
 
@@ -87,8 +179,8 @@ export function quickCommand(args: string[]): void {
     return;
   }
 
-  // 处理 --help 参数
-  if (firstArg === '--help' || firstArg === '-h') {
+  // 处理 --help 参数和 ? 参数（Mac兼容）
+  if (firstArg === '--help' || firstArg === '-h' || firstArg === '?') {
     showUsage();
     return;
   }

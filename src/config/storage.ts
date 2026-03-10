@@ -155,6 +155,11 @@ export function listConfigs(): string[] {
   return Object.keys(storage.configs);
 }
 
+export function getAllConfigs(): Record<string, Record<string, string>> {
+  const storage = readStorage();
+  return storage.configs;
+}
+
 /**
  * 删除指定配置
  * @param configName 配置名称

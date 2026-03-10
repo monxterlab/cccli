@@ -42,6 +42,10 @@ export function getDefaultConfigs(): QuickConfigs {
         baseUrl: 'https://api.poe.com',
         authKey: 'ANTHROPIC_API_KEY',
       },
+      zhhipu: {
+        baseUrl: 'https://open.bigmodel.cn/api/anthropic',
+        authKey: 'ANTHROPIC_API_KEY',
+      },
     },
   };
 }
