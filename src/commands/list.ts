@@ -6,7 +6,7 @@ export function listCommand(): void {
 
   if (configs.length === 0) {
     console.log('暂无配置');
-    console.log('使用 "cc add <config_name> <key> <value>" 添加配置');
+    console.log('使用 "cc set <config_name> <key> <value>" 添加配置');
     return;
   }
 
