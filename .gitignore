@@ -104,3 +104,6 @@ specs/
 req/
 
 package-lock.json
+
+CLAUDE.md
+.claude
