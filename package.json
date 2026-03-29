@@ -4,7 +4,7 @@
   "description": "Claude Code CLI configuration management tool",
   "main": "dist/index.js",
   "bin": {
-    "cc": "dist/index.js"
+    "cccli": "dist/index.js"
   },
   "scripts": {
     "build": "tsc",

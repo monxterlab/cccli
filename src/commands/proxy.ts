@@ -72,13 +72,13 @@ export async function proxyCommand(args: string[]): Promise<void> {
     console.error('错误: 参数不足');
     console.error('');
     console.error('用法:');
-    console.error('  cc proxy <proxy_name> <proxy_value>  设置代理');
-    console.error('  cc proxy --unset <proxy_name>        清除代理');
+    console.error('  cccli proxy <proxy_name> <proxy_value>  设置代理');
+    console.error('  cccli proxy --unset <proxy_name>        清除代理');
     console.error('');
     console.error('示例:');
-    console.error('  cc proxy http_proxy http://127.0.0.1:18080');
-    console.error('  cc proxy https_proxy http://127.0.0.1:18080');
-    console.error('  cc proxy --unset http_proxy');
+    console.error('  cccli proxy http_proxy http://127.0.0.1:18080');
+    console.error('  cccli proxy https_proxy http://127.0.0.1:18080');
+    console.error('  cccli proxy --unset http_proxy');
     process.exit(1);
   }
 
@@ -88,7 +88,7 @@ export async function proxyCommand(args: string[]): Promise<void> {
   if (isUnset) {
     if (args.length < 2) {
       console.error('错误: 请指定要清除的代理名称');
-      console.error('用法: cc proxy --unset <proxy_name>');
+      console.error('用法: cccli proxy --unset <proxy_name>');
       process.exit(1);
     }
 
@@ -123,7 +123,7 @@ export async function proxyCommand(args: string[]): Promise<void> {
   } else {
     if (args.length < 2) {
       console.error('错误: 请提供代理值');
-      console.error('用法: cc proxy <proxy_name> <proxy_value>');
+      console.error('用法: cccli proxy <proxy_name> <proxy_value>');
       process.exit(1);
     }
 

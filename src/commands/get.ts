@@ -54,10 +54,10 @@ export function getCommand(args: string[]): void {
   if (args.length < 1) {
     console.error('错误: 请指定配置名称');
     console.error('');
-    console.error('用法: cc get <config_name>');
+    console.error('用法: cccli get <config_name>');
     console.error('');
     console.error('示例:');
-    console.error('  cc get kimi');
+    console.error('  cccli get kimi');
     process.exit(1);
   }
 
@@ -65,7 +65,7 @@ export function getCommand(args: string[]): void {
 
   if (!configExists(configName)) {
     console.error(`错误: 配置 "${configName}" 不存在`);
-    console.error('使用 "cc list" 查看所有可用配置');
+    console.error('使用 "cccli list" 查看所有可用配置');
     process.exit(1);
   }
 

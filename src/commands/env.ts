@@ -59,22 +59,22 @@ function maskSensitiveValue(key: string, value: string): string {
 
 /**
  * env 命令入口
- * - cc env: 显示 Claude Code 配置中的 env 对象
- * - cc env proxy: 显示系统代理环境变量
+ * - cccli env: 显示 Claude Code 配置中的 env 对象
+ * - cccli env proxy: 显示系统代理环境变量
  */
 export async function envCommand(args: string[]): Promise<void> {
   if (args.length === 0) {
-    // cc env - 显示 Claude Code 配置中的 env 对象
+    // cccli env - 显示 Claude Code 配置中的 env 对象
     await showEnvConfig();
   } else if (args.length === 1 && args[0].toLowerCase() === 'proxy') {
-    // cc env proxy - 显示系统代理环境变量
+    // cccli env proxy - 显示系统代理环境变量
     showProxyEnv();
   } else {
     console.error('错误: 无效的参数');
     console.log('');
     console.log('用法:');
-    console.log('  cc env        查看 Claude Code 配置中的 env 对象');
-    console.log('  cc env proxy  查看系统代理环境变量 (http_proxy, https_proxy)');
+    console.log('  cccli env        查看 Claude Code 配置中的 env 对象');
+    console.log('  cccli env proxy  查看系统代理环境变量 (http_proxy, https_proxy)');
     process.exit(1);
   }
 }

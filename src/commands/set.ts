@@ -83,11 +83,11 @@ export function setCommand(args: string[]): void {
   if (args.length < 3) {
     console.error('错误: 参数不足');
     console.error('');
-    console.error('用法: cc set <config_name> <key> <value>');
+    console.error('用法: cccli set <config_name> <key> <value>');
     console.error('');
     console.error('示例:');
-    console.error('  cc set kimi ANTHROPIC_AUTH_TOKEN sk-xxxxx');
-    console.error('  cc set kimi ANTHROPIC_BASE_URL https://api.kimi.com/coding/');
+    console.error('  cccli set kimi ANTHROPIC_AUTH_TOKEN sk-xxxxx');
+    console.error('  cccli set kimi ANTHROPIC_BASE_URL https://api.kimi.com/coding/');
     process.exit(1);
   }
 
@@ -129,7 +129,7 @@ export function setCommand(args: string[]): void {
     console.error('');
     console.error('解决方法:');
     console.error(`  1. 先删除现有的 "${conflictKey}" 配置`);
-    console.error(`  2. 或者使用 "cc set ${configName} ${key} <value>" 覆盖（需要手动删除冲突项）`);
+    console.error(`  2. 或者使用 "cccli set ${configName} ${key} <value>" 覆盖（需要手动删除冲突项）`);
     process.exit(1);
   }
 

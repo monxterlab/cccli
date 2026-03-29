@@ -7,12 +7,12 @@ function showUsage(): void {
   console.log('删除配置命令');
   console.log('');
   console.log('用法:');
-  console.log('  cc unset <config_name>       删除指定名称的配置');
-  console.log('  cc unset <config_name> --force  强制删除，不提示确认');
+  console.log('  cccli unset <config_name>       删除指定名称的配置');
+  console.log('  cccli unset <config_name> --force  强制删除，不提示确认');
   console.log('');
   console.log('示例:');
-  console.log('  cc unset kimi                删除名为 kimi 的配置');
-  console.log('  cc unset kimi --force        强制删除 kimi 配置');
+  console.log('  cccli unset kimi                删除名为 kimi 的配置');
+  console.log('  cccli unset kimi --force        强制删除 kimi 配置');
   console.log('');
   console.log('注意: 删除操作不可恢复，请谨慎操作');
 }

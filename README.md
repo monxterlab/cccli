@@ -45,10 +45,10 @@ npm install -g @monxterlab/cccli
 npm install --save-dev @monxterlab/cccli
 
 # 通过 npx 运行
-npx cc <command>
+npx cccli <command>
 
 # 或者通过 npm scripts 运行
-npm run cc -- <command>
+npm run cccli -- <command>
 ```
 
 在 `package.json` 中添加脚本：
@@ -56,10 +56,10 @@ npm run cc -- <command>
 ```json
 {
   "scripts": {
-    "cc": "cc",
-    "cc:set": "cc set",
-    "cc:active": "cc active",
-    "cc:list": "cc list"
+    "cccli": "cccli",
+    "cccli:set": "cccli set",
+    "cccli:active": "cccli active",
+    "cccli:list": "cccli list"
   }
 }
 ```
@@ -67,8 +67,8 @@ npm run cc -- <command>
 然后运行：
 
 ```bash
-npm run cc:list
-npm run cc:set my-config ANTHROPIC_BASE_URL https://api.example.com
+npm run cccli:list
+npm run cccli:set my-config ANTHROPIC_BASE_URL https://api.example.com
 ```
 
 ### 前置要求
@@ -81,26 +81,26 @@ npm run cc:set my-config ANTHROPIC_BASE_URL https://api.example.com
 #### 1. 初始化配置模板
 
 ```bash
-cc q --init
+cccli q --init
 ```
 
 #### 2. 创建你的第一个配置
 
 ```bash
 # 使用快捷模板创建配置
-cc q zhhipu your-zhipu-api-key
+cccli q zhhipu your-zhipu-api-key
 ```
 
 #### 3. 激活配置
 
 ```bash
-cc active zhhipu
+cccli active zhhipu
 ```
 
 #### 4. 验证配置
 
 ```bash
-cc get zhhipu
+cccli get zhhipu
 ```
 
 ### 命令参考
@@ -109,32 +109,32 @@ cc get zhhipu
 
 | 命令 | 说明 | 示例 |
 |------|------|------|
-| `list` | 列出所有配置 | `cc list` |
-| `get <name>` | 查看指定配置详情 | `cc get zhhipu` |
-| `set <name> <key> <value>` | 设置配置项 | `cc set zhhipu ANTHROPIC_BASE_URL https://api.example.com` |
-| `unset <name> [key]` | 删除配置或配置项 | `cc unset zhhipu` |
-| `active <name>` | 激活指定配置 | `cc active zhhipu` |
+| `list` | 列出所有配置 | `cccli list` |
+| `get <name>` | 查看指定配置详情 | `cccli get zhhipu` |
+| `set <name> <key> <value>` | 设置配置项 | `cccli set zhhipu ANTHROPIC_BASE_URL https://api.example.com` |
+| `unset <name> [key]` | 删除配置或配置项 | `cccli unset zhhipu` |
+| `active <name>` | 激活指定配置 | `cccli active zhhipu` |
 
 #### 快速配置命令
 
 | 命令 | 说明 | 示例 |
 |------|------|------|
-| `q <template> <key>` | 使用模板快速创建配置 | `cc q zhhipu sk-xxx` |
-| `q --list` | 列出所有可用模板 | `cc q --list` |
-| `q --init` | 初始化默认模板 | `cc q --init` |
+| `q <template> <key>` | 使用模板快速创建配置 | `cccli q zhhipu sk-xxx` |
+| `q --list` | 列出所有可用模板 | `cccli q --list` |
+| `q --init` | 初始化默认模板 | `cccli q --init` |
 
 #### 导出命令
 
 | 命令 | 说明 | 示例 |
 |------|------|------|
-| `export json` | 导出所有配置为 JSON | `cc export json` |
+| `export json` | 导出所有配置为 JSON | `cccli export json` |
 
 #### 代理配置
 
 | 命令 | 说明 | 示例 |
 |------|------|------|
-| `proxy <name> <url>` | 为配置设置代理 | `cc proxy zhhipu http://127.0.0.1:7890` |
-| `env <name> <key> <value>` | 设置环境变量 | `cc env zhhipu HTTP_PROXY http://proxy.com` |
+| `proxy <name> <url>` | 为配置设置代理 | `cccli proxy zhhipu http://127.0.0.1:7890` |
+| `env <name> <key> <value>` | 设置环境变量 | `cccli env zhhipu HTTP_PROXY http://proxy.com` |
 
 #### 系统命令
 
@@ -165,19 +165,19 @@ cc get zhhipu
 
 ```bash
 # 配置 Kimi
-cc q kimi sk-kimi-api-key
-cc active kimi
+cccli q kimi sk-kimi-api-key
+cccli active kimi
 
 # 切换到智谱AI
-cc q zhhipu sk-zhipu-api-key
-cc active zhhipu
+cccli q zhhipu sk-zhipu-api-key
+cccli active zhhipu
 ```
 
 #### 场景 2：导出配置备份
 
 ```bash
 # 导出所有配置
-cc export json > backup.json
+cccli export json > backup.json
 
 # 查看导出的配置
 cat backup.json
@@ -187,26 +187,26 @@ cat backup.json
 
 ```bash
 # 为特定配置设置代理
-cc proxy zhhipu http://127.0.0.1:7890
+cccli proxy zhhipu http://127.0.0.1:7890
 ```
 
 ### Shell 自动补全
 
 #### Bash
 ```bash
-echo 'source <(cc completion bash)' >> ~/.bashrc
+echo 'source <(cccli completion bash)' >> ~/.bashrc
 source ~/.bashrc
 ```
 
 #### Zsh
 ```bash
-echo 'source <(cc completion zsh)' >> ~/.zshrc
+echo 'source <(cccli completion zsh)' >> ~/.zshrc
 source ~/.zshrc
 ```
 
 #### PowerShell
 ```powershell
-Add-Content $PROFILE "Invoke-Expression (& { (cc completion powershell | Out-String) })"
+Add-Content $PROFILE "Invoke-Expression (& { (cccli completion powershell | Out-String) })"
 . $PROFILE
 ```
 
@@ -229,7 +229,7 @@ chmod 600 ~/.cccli/config.json
 
 #### 查看详细错误信息
 ```bash
-cc --debug <command>
+cccli --debug <command>
 ```
 
 ### 贡献
@@ -275,10 +275,10 @@ If you prefer to install locally in your project, you can use:
 npm install --save-dev @monxterlab/cccli
 
 # Run via npx
-npx cc <command>
+npx cccli <command>
 
 # Or run via npm scripts
-npm run cc -- <command>
+npm run cccli -- <command>
 ```
 
 Add scripts to your `package.json`:
@@ -286,10 +286,10 @@ Add scripts to your `package.json`:
 ```json
 {
   "scripts": {
-    "cc": "cc",
-    "cc:set": "cc set",
-    "cc:active": "cc active",
-    "cc:list": "cc list"
+    "cccli": "cccli",
+    "cccli:set": "cccli set",
+    "cccli:active": "cccli active",
+    "cccli:list": "cccli list"
   }
 }
 ```
@@ -297,8 +297,8 @@ Add scripts to your `package.json`:
 Then run:
 
 ```bash
-npm run cc:list
-npm run cc:set my-config ANTHROPIC_BASE_URL https://api.example.com
+npm run cccli:list
+npm run cccli:set my-config ANTHROPIC_BASE_URL https://api.example.com
 ```
 
 ### Prerequisites
@@ -311,26 +311,26 @@ npm run cc:set my-config ANTHROPIC_BASE_URL https://api.example.com
 #### 1. Initialize configuration templates
 
 ```bash
-cc q --init
+cccli q --init
 ```
 
 #### 2. Create your first configuration
 
 ```bash
 # Create configuration using quick template
-cc q zhhipu your-zhipu-api-key
+cccli q zhhipu your-zhipu-api-key
 ```
 
 #### 3. Activate configuration
 
 ```bash
-cc active zhhipu
+cccli active zhhipu
 ```
 
 #### 4. Verify configuration
 
 ```bash
-cc get zhhipu
+cccli get zhhipu
 ```
 
 ### Command Reference
@@ -339,32 +339,32 @@ cc get zhhipu
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `list` | List all configurations | `cc list` |
-| `get <name>` | View configuration details | `cc get zhhipu` |
-| `set <name> <key> <value>` | Set configuration item | `cc set zhhipu ANTHROPIC_BASE_URL https://api.example.com` |
-| `unset <name> [key]` | Delete configuration or item | `cc unset zhhipu` |
-| `active <name>` | Activate specified configuration | `cc active zhhipu` |
+| `list` | List all configurations | `cccli list` |
+| `get <name>` | View configuration details | `cccli get zhhipu` |
+| `set <name> <key> <value>` | Set configuration item | `cccli set zhhipu ANTHROPIC_BASE_URL https://api.example.com` |
+| `unset <name> [key]` | Delete configuration or item | `cccli unset zhhipu` |
+| `active <name>` | Activate specified configuration | `cccli active zhhipu` |
 
 #### Quick Configuration Commands
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `q <template> <key>` | Create configuration using template | `cc q zhhipu sk-xxx` |
-| `q --list` | List all available templates | `cc q --list` |
-| `q --init` | Initialize default templates | `cc q --init` |
+| `q <template> <key>` | Create configuration using template | `cccli q zhhipu sk-xxx` |
+| `q --list` | List all available templates | `cccli q --list` |
+| `q --init` | Initialize default templates | `cccli q --init` |
 
 #### Export Commands
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `export json` | Export all configurations to JSON | `cc export json` |
+| `export json` | Export all configurations to JSON | `cccli export json` |
 
 #### Proxy Configuration
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `proxy <name> <url>` | Set proxy for configuration | `cc proxy zhhipu http://127.0.0.1:7890` |
-| `env <name> <key> <value>` | Set environment variable | `cc env zhhipu HTTP_PROXY http://proxy.com` |
+| `proxy <name> <url>` | Set proxy for configuration | `cccli proxy zhhipu http://127.0.0.1:7890` |
+| `env <name> <key> <value>` | Set environment variable | `cccli env zhhipu HTTP_PROXY http://proxy.com` |
 
 #### System Commands
 
@@ -395,19 +395,19 @@ cc get zhhipu
 
 ```bash
 # Configure Kimi
-cc q kimi sk-kimi-api-key
-cc active kimi
+cccli q kimi sk-kimi-api-key
+cccli active kimi
 
 # Switch to Zhipu AI
-cc q zhhipu sk-zhipu-api-key
-cc active zhhipu
+cccli q zhhipu sk-zhipu-api-key
+cccli active zhhipu
 ```
 
 #### Scenario 2: Export configuration backup
 
 ```bash
 # Export all configurations
-cc export json > backup.json
+cccli export json > backup.json
 
 # View exported configuration
 cat backup.json
@@ -417,26 +417,26 @@ cat backup.json
 
 ```bash
 # Set proxy for specific configuration
-cc proxy zhhipu http://127.0.0.1:7890
+cccli proxy zhhipu http://127.0.0.1:7890
 ```
 
 ### Shell Auto-completion
 
 #### Bash
 ```bash
-echo 'source <(cc completion bash)' >> ~/.bashrc
+echo 'source <(cccli completion bash)' >> ~/.bashrc
 source ~/.bashrc
 ```
 
 #### Zsh
 ```bash
-echo 'source <(cc completion zsh)' >> ~/.zshrc
+echo 'source <(cccli completion zsh)' >> ~/.zshrc
 source ~/.zshrc
 ```
 
 #### PowerShell
 ```powershell
-Add-Content $PROFILE "Invoke-Expression (& { (cc completion powershell | Out-String) })"
+Add-Content $PROFILE "Invoke-Expression (& { (cccli completion powershell | Out-String) })"
 . $PROFILE
 ```
 
@@ -459,7 +459,7 @@ chmod 600 ~/.cccli/config.json
 
 #### View detailed error messages
 ```bash
-cc --debug <command>
+cccli --debug <command>
 ```
 
 ### Contributing

@@ -11,9 +11,9 @@ function generateBashCompletion(): string {
   return `# cccli Bash Completion
 # 安装方法:
 #   1. 将以下内容添加到 ~/.bashrc 或 ~/.bash_profile:
-#      source <(cc completion bash)
+#      source <(cccli completion bash)
 #   2. 或者保存到文件并 source:
-#      cc completion bash > /etc/bash_completion.d/cc
+#      cccli completion bash > /etc/bash_completion.d/cccli
 
 _cccli_completion() {
     local cur prev opts
@@ -87,7 +87,7 @@ _cccli_completion() {
     esac
 }
 
-complete -F _cccli_completion cc
+complete -F _cccli_completion cccli
 `;
 }
 
@@ -101,11 +101,11 @@ function generateZshCompletion(): string {
   return `# cccli Zsh Completion
 # 安装方法:
 #   1. 将以下内容添加到 ~/.zshrc:
-#      source <(cc completion zsh)
+#      source <(cccli completion zsh)
 #   2. 或者保存到 fpath 目录:
-#      cc completion zsh > "\${fpath[1]}/_cc"
+#      cccli completion zsh > "\${fpath[1]}/_cccli"
 
-#compdef cc
+#compdef cccli
 
 _cccli() {
     local curcontext="$curcontext" state line
@@ -134,7 +134,7 @@ _cccli() {
 
     case "$state" in
         command)
-            _describe -t commands 'cc commands' commands
+            _describe -t commands 'cccli commands' commands
             ;;
         config)
             case $line[1] in
@@ -196,51 +196,51 @@ _cccli "$@"
 function generateFishCompletion(): string {
   return `# cccli Fish Completion
 # 安装方法:
-#   1. 将以下内容添加到 ~/.config/fish/completions/cc.fish:
-#      cc completion fish > ~/.config/fish/completions/cc.fish
+#   1. 将以下内容添加到 ~/.config/fish/completions/cccli.fish:
+#      cccli completion fish > ~/.config/fish/completions/cccli.fish
 
 # 主命令补全
-complete -c cc -f
-complete -c cc -n '__fish_use_subcommand' -a 'set' -d '设置配置项'
-complete -c cc -n '__fish_use_subcommand' -a 'active' -d '激活指定配置'
-complete -c cc -n '__fish_use_subcommand' -a 'list' -d '列出所有配置'
-complete -c cc -n '__fish_use_subcommand' -a 'get' -d '查看配置详情'
-complete -c cc -n '__fish_use_subcommand' -a 'env' -d '查看环境变量配置'
-complete -c cc -n '__fish_use_subcommand' -a 'proxy' -d '设置代理环境变量'
-complete -c cc -n '__fish_use_subcommand' -a 'completion' -d '生成 Shell 补全脚本'
-complete -c cc -n '__fish_use_subcommand' -a 'q' -d '快速配置环境'
-complete -c cc -n '__fish_use_subcommand' -a 'unset' -d '删除指定配置'
-complete -c cc -n '__fish_use_subcommand' -a 'help' -d '显示帮助信息'
-complete -c cc -n '__fish_use_subcommand' -a '?' -d '显示帮助信息'
+complete -c cccli -f
+complete -c cccli -n '__fish_use_subcommand' -a 'set' -d '设置配置项'
+complete -c cccli -n '__fish_use_subcommand' -a 'active' -d '激活指定配置'
+complete -c cccli -n '__fish_use_subcommand' -a 'list' -d '列出所有配置'
+complete -c cccli -n '__fish_use_subcommand' -a 'get' -d '查看配置详情'
+complete -c cccli -n '__fish_use_subcommand' -a 'env' -d '查看环境变量配置'
+complete -c cccli -n '__fish_use_subcommand' -a 'proxy' -d '设置代理环境变量'
+complete -c cccli -n '__fish_use_subcommand' -a 'completion' -d '生成 Shell 补全脚本'
+complete -c cccli -n '__fish_use_subcommand' -a 'q' -d '快速配置环境'
+complete -c cccli -n '__fish_use_subcommand' -a 'unset' -d '删除指定配置'
+complete -c cccli -n '__fish_use_subcommand' -a 'help' -d '显示帮助信息'
+complete -c cccli -n '__fish_use_subcommand' -a '?' -d '显示帮助信息'
 
 # 配置名称补全 (set, get, active, unset)
-complete -c cc -n '__fish_seen_subcommand_from set get active unset' -a '(cc list 2>/dev/null | string replace "  - " "")' -d '配置名称'
+complete -c cccli -n '__fish_seen_subcommand_from set get active unset' -a '(cccli list 2>/dev/null | string replace "  - " "")' -d '配置名称'
 
 # unset 命令的 --force 补全
-complete -c cc -n '__fish_seen_subcommand_from unset' -a '--force' -d '强制删除'
+complete -c cccli -n '__fish_seen_subcommand_from unset' -a '--force' -d '强制删除'
 
 # q 命令的模板补全
-complete -c cc -n '__fish_seen_subcommand_from q' -a '(cc q --list 2>/dev/null | grep "^  " | string replace "  " "")' -d '模板名称'
+complete -c cccli -n '__fish_seen_subcommand_from q' -a '(cccli q --list 2>/dev/null | grep "^  " | string replace "  " "")' -d '模板名称'
 
 # env 子命令补全
-complete -c cc -n '__fish_seen_subcommand_from env' -a 'proxy' -d '查看系统代理'
+complete -c cccli -n '__fish_seen_subcommand_from env' -a 'proxy' -d '查看系统代理'
 
 # proxy 子命令补全
-complete -c cc -n '__fish_seen_subcommand_from proxy' -a 'http_proxy https_proxy --unset' -d '代理变量'
+complete -c cccli -n '__fish_seen_subcommand_from proxy' -a 'http_proxy https_proxy --unset' -d '代理变量'
 
 # completion 子命令补全
-complete -c cc -n '__fish_seen_subcommand_from completion' -a 'bash zsh fish' -d 'Shell 类型'
+complete -c cccli -n '__fish_seen_subcommand_from completion' -a 'bash zsh fish' -d 'Shell 类型'
 
 # set 命令的 key 补全
-complete -c cc -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_AUTH_TOKEN' -d '认证令牌'
-complete -c cc -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_API_KEY' -d 'API 密钥'
-complete -c cc -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_BASE_URL' -d '基础 URL'
-complete -c cc -n '__fish_seen_subcommand_from set' -a 'CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS' -d '实验性功能'
-complete -c cc -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_MODEL' -d '模型'
-complete -c cc -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_DEFAULT_HAIKU_MODEL' -d 'Haiku 默认模型'
-complete -c cc -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_DEFAULT_OPUS_MODEL' -d 'Opus 默认模型'
-complete -c cc -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_DEFAULT_SONNET_MODEL' -d 'Sonnet 默认模型'
-complete -c cc -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_REASONING_MODEL' -d '推理模型'
+complete -c cccli -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_AUTH_TOKEN' -d '认证令牌'
+complete -c cccli -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_API_KEY' -d 'API 密钥'
+complete -c cccli -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_BASE_URL' -d '基础 URL'
+complete -c cccli -n '__fish_seen_subcommand_from set' -a 'CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS' -d '实验性功能'
+complete -c cccli -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_MODEL' -d '模型'
+complete -c cccli -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_DEFAULT_HAIKU_MODEL' -d 'Haiku 默认模型'
+complete -c cccli -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_DEFAULT_OPUS_MODEL' -d 'Opus 默认模型'
+complete -c cccli -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_DEFAULT_SONNET_MODEL' -d 'Sonnet 默认模型'
+complete -c cccli -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_REASONING_MODEL' -d '推理模型'
 `;
 }
 
@@ -252,25 +252,25 @@ function showInstallHelp(): void {
   console.log('');
   console.log('Bash:');
   console.log('  临时使用 (当前会话):');
-  console.log('    source <(cc completion bash)');
+  console.log('    source <(cccli completion bash)');
   console.log('');
   console.log('  永久生效 (推荐):');
-  console.log('    cc completion bash >> ~/.bashrc');
+  console.log('    cccli completion bash >> ~/.bashrc');
   console.log('    # 或保存到系统目录:');
-  console.log('    cc completion bash | sudo tee /etc/bash_completion.d/cc > /dev/null');
+  console.log('    cccli completion bash | sudo tee /etc/bash_completion.d/cccli > /dev/null');
   console.log('');
   console.log('Zsh:');
   console.log('  临时使用 (当前会话):');
-  console.log('    source <(cc completion zsh)');
+  console.log('    source <(cccli completion zsh)');
   console.log('');
   console.log('  永久生效 (推荐):');
-  console.log('    cc completion zsh >> ~/.zshrc');
+  console.log('    cccli completion zsh >> ~/.zshrc');
   console.log('    # 或使用 fpath:');
-  console.log('    cc completion zsh > "${fpath[1]}/_cc"');
+  console.log('    cccli completion zsh > "${fpath[1]}/_cccli"');
   console.log('');
   console.log('Fish:');
   console.log('  直接保存到 completions 目录:');
-  console.log('    cc completion fish > ~/.config/fish/completions/cc.fish');
+  console.log('    cccli completion fish > ~/.config/fish/completions/cccli.fish');
   console.log('');
   console.log('Windows (PowerShell):');
   console.log('  PowerShell 补全暂不支持，建议使用 Git Bash 或 WSL');
@@ -285,8 +285,8 @@ export function completionCommand(args: string[]): void {
     console.log('生成 Shell 自动补全脚本');
     console.log('');
     console.log('用法:');
-    console.log('  cc completion <shell>        生成指定 Shell 的补全脚本');
-    console.log('  cc completion --install      显示安装说明');
+    console.log('  cccli completion <shell>        生成指定 Shell 的补全脚本');
+    console.log('  cccli completion --install      显示安装说明');
     console.log('');
     console.log('支持的 Shell:');
     console.log('  bash    生成 Bash 补全脚本');
@@ -294,13 +294,13 @@ export function completionCommand(args: string[]): void {
     console.log('  fish    生成 Fish 补全脚本');
     console.log('');
     console.log('示例:');
-    console.log('  cc completion bash           # 输出 Bash 补全脚本');
-    console.log('  cc completion zsh            # 输出 Zsh 补全脚本');
-    console.log('  cc completion --install      # 显示安装说明');
+    console.log('  cccli completion bash           # 输出 Bash 补全脚本');
+    console.log('  cccli completion zsh            # 输出 Zsh 补全脚本');
+    console.log('  cccli completion --install      # 显示安装说明');
     console.log('');
     console.log('快速安装:');
-    console.log('  source <(cc completion bash) # Bash 临时启用');
-    console.log('  source <(cc completion zsh)  # Zsh 临时启用');
+    console.log('  source <(cccli completion bash) # Bash 临时启用');
+    console.log('  source <(cccli completion zsh)  # Zsh 临时启用');
     return;
   }
 

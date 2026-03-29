@@ -6,11 +6,11 @@ export async function activeCommand(args: string[]): Promise<void> {
   if (args.length < 1) {
     console.error('错误: 请指定配置名称');
     console.error('');
-    console.error('用法: cc active <config_name>');
-    console.error('       cc active <config_name> --force  跳过文件存在性检查');
+    console.error('用法: cccli active <config_name>');
+    console.error('       cccli active <config_name> --force  跳过文件存在性检查');
     console.error('');
     console.error('示例:');
-    console.error('  cc active kimi');
+    console.error('  cccli active kimi');
     process.exit(1);
   }
 
@@ -19,7 +19,7 @@ export async function activeCommand(args: string[]): Promise<void> {
 
   if (!configExists(configName)) {
     console.error(`错误: 配置 "${configName}" 不存在`);
-    console.error('使用 "cc list" 查看所有可用配置');
+    console.error('使用 "cccli list" 查看所有可用配置');
     process.exit(1);
   }
 
@@ -46,7 +46,7 @@ export async function activeCommand(args: string[]): Promise<void> {
     console.warn('  1. 先运行一次 Claude Code 以创建配置文件');
     console.warn('  2. 或使用 --force 参数强制继续 (将自动创建配置文件)');
     console.warn('');
-    console.warn(`强制继续命令: cc active ${configName} --force`);
+    console.warn(`强制继续命令: cccli active ${configName} --force`);
     process.exit(1);
   }
 

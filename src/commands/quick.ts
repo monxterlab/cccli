@@ -42,16 +42,16 @@ function showUsage(): void {
   console.log('快速配置环境命令');
   console.log('');
   console.log('用法:');
-  console.log('  cc q <template_name> <auth_key>    根据模板快速创建配置');
-  console.log('  cc q --list                         列出所有可用模板');
-  console.log('  cc q --init                         初始化默认模板配置');
-  console.log('  cc q --init --force                 强制覆盖现有配置');
+  console.log('  cccli q <template_name> <auth_key>    根据模板快速创建配置');
+  console.log('  cccli q --list                         列出所有可用模板');
+  console.log('  cccli q --init                         初始化默认模板配置');
+  console.log('  cccli q --init --force                 强制覆盖现有配置');
   console.log('');
   console.log('示例:');
-  console.log('  cc q kimi_coding sk-xxxxx');
+  console.log('  cccli q kimi_coding sk-xxxxx');
   console.log('    相当于:');
-  console.log('    cc set kimi_coding ANTHROPIC_BASE_URL https://api.kimi.com/coding');
-  console.log('    cc set kimi_coding ANTHROPIC_AUTH_TOKEN sk-xxxxx');
+  console.log('    cccli set kimi_coding ANTHROPIC_BASE_URL https://api.kimi.com/coding');
+  console.log('    cccli set kimi_coding ANTHROPIC_AUTH_TOKEN sk-xxxxx');
   console.log('');
   console.log('可用模板:');
   listQuickConfigs();
@@ -141,7 +141,7 @@ function interactiveSelect(): void {
 
         console.log('');
         console.log(`配置 "${templateName}" 已完成！`);
-        console.log(`使用 "cc active ${templateName}" 激活此配置`);
+        console.log(`使用 "cccli active ${templateName}" 激活此配置`);
       } catch (error) {
         console.error('设置配置失败:', error);
       }
@@ -189,10 +189,10 @@ export function quickCommand(args: string[]): void {
   if (args.length < 2) {
     console.error('错误: 参数不足');
     console.error('');
-    console.error('用法: cc q <template_name> <auth_key>');
+    console.error('用法: cccli q <template_name> <auth_key>');
     console.error('');
     console.error('示例:');
-    console.error('  cc q kimi_coding sk-xxxxx');
+    console.error('  cccli q kimi_coding sk-xxxxx');
     console.error('');
     console.error('可用模板:');
     listQuickConfigs();
@@ -243,7 +243,7 @@ export function quickCommand(args: string[]): void {
 
     console.log('');
     console.log(`配置 "${templateName}" 已完成！`);
-    console.log(`使用 "cc active ${templateName}" 激活此配置`);
+    console.log(`使用 "cccli active ${templateName}" 激活此配置`);
   } catch (error) {
     console.error('设置配置失败:', error);
     process.exit(1);

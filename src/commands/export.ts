@@ -24,10 +24,10 @@ function showExportHelp(): void {
   console.log('导出配置命令');
   console.log('');
   console.log('用法:');
-  console.log('  cc export json          导出配置为JSON格式');
+  console.log('  cccli export json          导出配置为JSON格式');
   console.log('');
   console.log('示例:');
-  console.log('  cc export json > my-configs.json');
+  console.log('  cccli export json > my-configs.json');
   console.log('');
   console.log('选项:');
   console.log('  -h, --help     显示帮助信息');
@@ -99,7 +99,7 @@ export function exportCommand(args: string[]): void {
   if (args.length > 1) {
     console.error('错误: 参数过多');
     console.error('');
-    console.error('用法: cc export json');
+    console.error('用法: cccli export json');
     console.error('');
     console.error('使用 --help 查看更多选项');
     process.exit(1);

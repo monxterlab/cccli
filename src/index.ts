@@ -83,7 +83,7 @@ async function main(): Promise<void> {
       console.error(`错误: 未知命令 "${command}"`);
       console.error('');
       console.error('可用命令: set, active, list, get, env, proxy, completion, q, unset, export, upgrade, help');
-      console.error('运行 "cc help" 或 "cc ?" 查看详细帮助');
+      console.error('运行 "cccli help" 或 "cccli ?" 查看详细帮助');
       process.exit(1);
   }
 }
