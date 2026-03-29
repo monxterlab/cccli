@@ -157,6 +157,17 @@ export async function writeClaudeConfig(config: Record<string, any>): Promise<vo
 }
 
 /**
+ * 模型相关配置字段列表
+ * 这些字段在激活新配置时，如果新配置中未设置，会从现有配置中移除
+ */
+const MODEL_KEYS = [
+  'ANTHROPIC_MODEL',
+  'ANTHROPIC_DEFAULT_OPUS_MODEL',
+  'ANTHROPIC_DEFAULT_SONNET_MODEL',
+  'ANTHROPIC_DEFAULT_HAIKU_MODEL',
+];
+
+/**
  * 将指定配置应用到 Claude Code 配置的 env 对象中
  *
  * 读取现有 Claude Code 配置，将新配置的 `settings` 内容合并到 `env` 对象中。
@@ -166,6 +177,10 @@ export async function writeClaudeConfig(config: Record<string, any>): Promise<vo
  * - 如果新配置包含 ANTHROPIC_AUTH_TOKEN，将删除已有的 ANTHROPIC_API_KEY
  * - 如果新配置包含 ANTHROPIC_API_KEY，将删除已有的 ANTHROPIC_AUTH_TOKEN
  * - 拒绝激活同时包含两个认证方式的配置
+ *
+ * 同时处理模型字段的清理逻辑：
+ * - 如果新配置中没有设置某些模型字段，会从现有配置中移除这些字段
+ * - 避免旧配置中的模型设置影响新配置的行为
  *
  * @param {string} configName - 配置名称（用于错误提示）
  * @param {Config} config - 包含 settings 的配置对象
@@ -217,6 +232,14 @@ export async function applyConfigToClaude(configName: string, config: Config): P
     if (hasApiKey && AUTH_TOKEN_KEY in newEnv) {
       delete newEnv[AUTH_TOKEN_KEY];
       console.log(`ℹ️  已移除冲突的认证方式: ${AUTH_TOKEN_KEY}`);
+    }
+
+    // 处理模型字段清理：如果新配置中没有设置某些模型字段，从现有配置中移除
+    for (const modelKey of MODEL_KEYS) {
+      if (!(modelKey in config.settings) && modelKey in newEnv) {
+        delete newEnv[modelKey];
+        console.log(`ℹ️  已清理模型配置: ${modelKey}`);
+      }
     }
 
     // 合并新配置
