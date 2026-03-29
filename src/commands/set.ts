@@ -3,6 +3,19 @@ import { addConfigItem, getConfig, configExists } from '../config/storage';
 // 互斥的认证 key 组
 const AUTH_KEYS = ['ANTHROPIC_AUTH_TOKEN', 'ANTHROPIC_API_KEY'];
 
+// Key 快捷映射表
+const KEY_SHORTCUTS: Record<string, string> = {
+  'URL': 'ANTHROPIC_BASE_URL',
+  'TOKEN': 'ANTHROPIC_AUTH_TOKEN',
+  'KEY': 'ANTHROPIC_API_KEY',
+  'MODEL': 'ANTHROPIC_MODEL',
+  'HAIKU': 'ANTHROPIC_DEFAULT_HAIKU_MODEL',
+  'OPUS': 'ANTHROPIC_DEFAULT_OPUS_MODEL',
+  'SONNET': 'ANTHROPIC_DEFAULT_SONNET_MODEL',
+  'REASON': 'ANTHROPIC_REASONING_MODEL',
+  'TEAMS': 'CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS',
+};
+
 // 可智能补全的配置 key 列表
 const COMPLETABLE_KEYS = [
   'ANTHROPIC_AUTH_TOKEN',
@@ -91,8 +104,11 @@ export function setCommand(args: string[]): void {
     process.exit(1);
   }
 
-  const [configName, key, ...valueParts] = args;
+  const [configName, rawKey, ...valueParts] = args;
   const value = valueParts.join(' ');
+
+  // 处理 key 快捷映射
+  const key = KEY_SHORTCUTS[rawKey.toUpperCase()] || rawKey;
 
   // 检查 key 是否需要补全提示
   const suggestions = suggestKeyCompletion(key);

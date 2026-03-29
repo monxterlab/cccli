@@ -14,6 +14,8 @@ import { quickCommand } from './commands/quick';
 import { unsetCommand } from './commands/unset';
 import { upgradeCommand } from './commands/upgrade';
 import { exportCommand } from './commands/export';
+import { testCommand } from './commands/test';
+import { ccCommand } from './commands/cc';
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
@@ -75,6 +77,14 @@ async function main(): Promise<void> {
       await unsetCommand(commandArgs);
       break;
 
+    case 'test':
+      await testCommand(commandArgs);
+      break;
+
+    case 'cc':
+      await ccCommand(commandArgs);
+      break;
+
     case 'upgrade':
       await upgradeCommand();
       break;
@@ -82,7 +92,7 @@ async function main(): Promise<void> {
     default:
       console.error(`错误: 未知命令 "${command}"`);
       console.error('');
-      console.error('可用命令: set, active, list, get, env, proxy, completion, q, unset, export, upgrade, help');
+      console.error('可用命令: set, active, list, get, env, proxy, completion, q, unset, export, upgrade, test, cc, help');
       console.error('运行 "cccli help" 或 "cccli ?" 查看详细帮助');
       process.exit(1);
   }

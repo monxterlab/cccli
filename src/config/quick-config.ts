@@ -42,9 +42,25 @@ export function getDefaultConfigs(): QuickConfigs {
         baseUrl: 'https://api.poe.com',
         authKey: 'ANTHROPIC_API_KEY',
       },
-      zhhipu: {
+      zai: {
         baseUrl: 'https://open.bigmodel.cn/api/anthropic',
         authKey: 'ANTHROPIC_API_KEY',
+      },
+      zai_coding: {
+        baseUrl: 'https://open.bigmodel.cn/api/anthropic',
+        authKey: 'ANTHROPIC_AUTH_TOKEN',
+      },
+      minimax: {
+        baseUrl: 'https://api.minimaxi.com/anthropic',
+        authKey: 'ANTHROPIC_API_KEY',
+      },
+      minimax_coding: {
+        baseUrl: 'https://api.minimaxi.com/anthropic',
+        authKey: 'ANTHROPIC_AUTH_TOKEN',
+      },
+      ark: {
+        baseUrl: 'https://ark.cn-beijing.volces.com/api/compatible',
+        authKey: 'ANTHROPIC_AUTH_TOKEN',
       },
     },
   };

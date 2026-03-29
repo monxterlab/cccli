@@ -111,15 +111,30 @@ cccli get zhhipu
 |------|------|------|
 | `list` | 列出所有配置 | `cccli list` |
 | `get <name>` | 查看指定配置详情 | `cccli get zhhipu` |
-| `set <name> <key> <value>` | 设置配置项 | `cccli set zhhipu ANTHROPIC_BASE_URL https://api.example.com` |
+| `set <name> <key> <value>` | 设置配置项（支持Key快捷） | `cccli set myconfig TOKEN sk-xxxxx` |
 | `unset <name> [key]` | 删除配置或配置项 | `cccli unset zhhipu` |
 | `active <name>` | 激活指定配置 | `cccli active zhhipu` |
+
+#### 测试命令
+
+| 命令 | 说明 | 示例 |
+|------|------|------|
+| `test <name>` | 测试配置连通性（验证 Anthropic API 规范） | `cccli test ali_coding` |
+
+#### Claude Code 管理命令
+
+| 命令 | 说明 | 示例 |
+|------|------|------|
+| `cc install` | 安装 Claude Code | `cccli cc install` |
+| `cc update` | 更新 Claude Code | `cccli cc update` |
+| `cc upgrade` | 升级 Claude Code（claude update） | `cccli cc upgrade` |
+| `cc version` | 查看 Claude Code 版本 | `cccli cc version` |
 
 #### 快速配置命令
 
 | 命令 | 说明 | 示例 |
 |------|------|------|
-| `q <template> <key>` | 使用模板快速创建配置 | `cccli q zhhipu sk-xxx` |
+| `q <template> <auth_key> [model]` | 使用模板快速创建配置 | `cccli q zai sk-xxx claude-3-opus` |
 | `q --list` | 列出所有可用模板 | `cccli q --list` |
 | `q --init` | 初始化默认模板 | `cccli q --init` |
 
@@ -152,7 +167,11 @@ cccli get zhhipu
 | `kimi` | Moonshot | https://api.moonshot.cn/anthropic |
 | `ali_coding` | 阿里云 | https://coding.dashscope.aliyuncs.com/apps/anthropic |
 | `poe` | Poe | https://api.poe.com |
-| `zhhipu` | 智谱AI | https://open.bigmodel.cn/api/anthropic |
+| `zai` | 智谱AI | https://open.bigmodel.cn/api/anthropic |
+| `zai_coding` | 智谱AI Coding | https://open.bigmodel.cn/api/anthropic |
+| `minimax` | MiniMax | https://api.minimaxi.com/anthropic |
+| `minimax_coding` | MiniMax Coding | https://api.minimaxi.com/anthropic |
+| `ark` | 火山方舟 | https://ark.cn-beijing.volces.com/api/compatible |
 
 ### 配置文件位置
 
@@ -169,11 +188,72 @@ cccli q kimi sk-kimi-api-key
 cccli active kimi
 
 # 切换到智谱AI
-cccli q zhhipu sk-zhipu-api-key
-cccli active zhhipu
+cccli q zai sk-zhipu-api-key
+cccli active zai
+
+# 使用模型参数创建配置
+cccli q ali_coding sk-xxxxx claude-3-opus-20240229
+cccli active ali_coding
 ```
 
-#### 场景 2：导出配置备份
+#### 场景 2：测试配置连通性
+
+```bash
+# 测试配置是否符合 Anthropic API 规范
+cccli test ali_coding
+```
+
+测试会验证：
+- API 地址是否可访问
+- 认证信息是否正确
+- 响应是否符合 Anthropic API 规范
+- 显示可用模型列表
+
+#### 场景 3：Claude Code 管理
+
+```bash
+# 安装 Claude Code
+cccli cc install
+
+# 更新 Claude Code
+cccli cc update
+
+# 升级 Claude Code
+cccli cc upgrade
+
+# 查看 Claude Code 版本
+cccli cc version
+```
+
+#### 场景 4：使用快捷 Key 设置配置
+
+```bash
+# 使用快捷 Key 设置配置
+cccli set myconfig TOKEN sk-xxxxx
+cccli set myconfig URL https://api.example.com
+cccli set myconfig MODEL claude-3-opus-20240229
+cccli set myconfig HAIKU claude-3-haiku-20240307
+cccli set myconfig OPUS claude-3-opus-20240229
+cccli set myconfig SONNET claude-3-sonnet-20240229
+cccli set myconfig REASON claude-3-opus-20240229
+cccli set myconfig TEAMS true
+```
+
+**支持的 Key 快捷映射：**
+
+| 快捷输入 | 完整配置项 |
+|---------|-----------|
+| `URL` | `ANTHROPIC_BASE_URL` |
+| `TOKEN` | `ANTHROPIC_AUTH_TOKEN` |
+| `KEY` | `ANTHROPIC_API_KEY` |
+| `MODEL` | `ANTHROPIC_MODEL` |
+| `HAIKU` | `ANTHROPIC_DEFAULT_HAIKU_MODEL` |
+| `OPUS` | `ANTHROPIC_DEFAULT_OPUS_MODEL` |
+| `SONNET` | `ANTHROPIC_DEFAULT_SONNET_MODEL` |
+| `REASON` | `ANTHROPIC_REASONING_MODEL` |
+| `TEAMS` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` |
+
+#### 场景 5：导出配置备份
 
 ```bash
 # 导出所有配置
@@ -183,11 +263,15 @@ cccli export json > backup.json
 cat backup.json
 ```
 
-#### 场景 3：使用代理
+#### 场景 6：使用代理
 
 ```bash
-# 为特定配置设置代理
-cccli proxy zhhipu http://127.0.0.1:7890
+# 设置系统代理
+cccli proxy http_proxy http://127.0.0.1:7890
+cccli proxy https_proxy http://127.0.0.1:7890
+
+# 清除代理
+cccli proxy --unset http_proxy
 ```
 
 ### Shell 自动补全
@@ -341,15 +425,30 @@ cccli get zhhipu
 |---------|-------------|---------|
 | `list` | List all configurations | `cccli list` |
 | `get <name>` | View configuration details | `cccli get zhhipu` |
-| `set <name> <key> <value>` | Set configuration item | `cccli set zhhipu ANTHROPIC_BASE_URL https://api.example.com` |
+| `set <name> <key> <value>` | Set configuration item (supports key shortcuts) | `cccli set myconfig TOKEN sk-xxxxx` |
 | `unset <name> [key]` | Delete configuration or item | `cccli unset zhhipu` |
 | `active <name>` | Activate specified configuration | `cccli active zhhipu` |
+
+#### Test Command
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `test <name>` | Test configuration connectivity (verify Anthropic API spec) | `cccli test ali_coding` |
+
+#### Claude Code Management Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `cc install` | Install Claude Code | `cccli cc install` |
+| `cc update` | Update Claude Code | `cccli cc update` |
+| `cc upgrade` | Upgrade Claude Code (claude update) | `cccli cc upgrade` |
+| `cc version` | Show Claude Code version | `cccli cc version` |
 
 #### Quick Configuration Commands
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `q <template> <key>` | Create configuration using template | `cccli q zhhipu sk-xxx` |
+| `q <template> <auth_key> [model]` | Create configuration using template | `cccli q zai sk-xxx claude-3-opus` |
 | `q --list` | List all available templates | `cccli q --list` |
 | `q --init` | Initialize default templates | `cccli q --init` |
 
@@ -382,7 +481,11 @@ cccli get zhhipu
 | `kimi` | Moonshot | https://api.moonshot.cn/anthropic |
 | `ali_coding` | Alibaba Cloud | https://coding.dashscope.aliyuncs.com/apps/anthropic |
 | `poe` | Poe | https://api.poe.com |
-| `zhhipu` | Zhipu AI | https://open.bigmodel.cn/api/anthropic |
+| `zai` | Zhipu AI | https://open.bigmodel.cn/api/anthropic |
+| `zai_coding` | Zhipu AI Coding | https://open.bigmodel.cn/api/anthropic |
+| `minimax` | MiniMax | https://api.minimaxi.com/anthropic |
+| `minimax_coding` | MiniMax Coding | https://api.minimaxi.com/anthropic |
+| `ark` | Volcano Ark | https://ark.cn-beijing.volces.com/api/compatible |
 
 ### Configuration File Location
 
@@ -399,11 +502,63 @@ cccli q kimi sk-kimi-api-key
 cccli active kimi
 
 # Switch to Zhipu AI
-cccli q zhhipu sk-zhipu-api-key
-cccli active zhhipu
+cccli q zai sk-zhipu-api-key
+cccli active zai
 ```
 
-#### Scenario 2: Export configuration backup
+#### Scenario 2: Test configuration connectivity
+
+```bash
+# Test if configuration meets Anthropic API specification
+cccli test ali_coding
+```
+
+Tests verify:
+- API address is accessible
+- Authentication is correct
+- Response conforms to Anthropic API spec
+- Displays available model list
+
+#### Scenario 3: Claude Code Management
+
+```bash
+# Install Claude Code
+cccli cc install
+
+# Update Claude Code
+cccli cc update
+
+# Upgrade Claude Code
+cccli cc upgrade
+
+# Show Claude Code version
+cccli cc version
+```
+
+#### Scenario 4: Use shortcut keys for configuration
+
+```bash
+# Use shortcut keys to set configuration
+cccli set myconfig TOKEN sk-xxxxx
+cccli set myconfig URL https://api.example.com
+cccli set myconfig MODEL claude-3-opus-20240229
+```
+
+**Supported Key Shortcuts:**
+
+| Shortcut | Full Configuration Key |
+|---------|----------------------|
+| `URL` | `ANTHROPIC_BASE_URL` |
+| `TOKEN` | `ANTHROPIC_AUTH_TOKEN` |
+| `KEY` | `ANTHROPIC_API_KEY` |
+| `MODEL` | `ANTHROPIC_MODEL` |
+| `HAIKU` | `ANTHROPIC_DEFAULT_HAIKU_MODEL` |
+| `OPUS` | `ANTHROPIC_DEFAULT_OPUS_MODEL` |
+| `SONNET` | `ANTHROPIC_DEFAULT_SONNET_MODEL` |
+| `REASON` | `ANTHROPIC_REASONING_MODEL` |
+| `TEAMS` | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` |
+
+#### Scenario 5: Export configuration backup
 
 ```bash
 # Export all configurations
@@ -413,11 +568,15 @@ cccli export json > backup.json
 cat backup.json
 ```
 
-#### Scenario 3: Use proxy
+#### Scenario 6: Use proxy
 
 ```bash
-# Set proxy for specific configuration
-cccli proxy zhhipu http://127.0.0.1:7890
+# Set system proxy
+cccli proxy http_proxy http://127.0.0.1:7890
+cccli proxy https_proxy http://127.0.0.1:7890
+
+# Clear proxy
+cccli proxy --unset http_proxy
 ```
 
 ### Shell Auto-completion

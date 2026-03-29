@@ -22,7 +22,7 @@ _cccli_completion() {
     prev="\${COMP_WORDS[COMP_CWORD-1]}"
 
     # 主命令列表
-    local commands="set active list get env proxy help completion q unset ?"
+    local commands="set active list get env proxy help completion q unset test upgrade cc ?"
 
     # 配置名称列表
     local configs="${configs}"
@@ -38,7 +38,7 @@ _cccli_completion() {
         2)
             # 第二个参数：根据命令补全
             case \${prev} in
-                set|get|active|unset)
+                set|get|active|unset|test)
                     # 补全配置名称
                     COMPREPLY=( $(compgen -W "\${configs}" -- \${cur}) )
                     ;;
@@ -54,6 +54,9 @@ _cccli_completion() {
                     ;;
                 completion)
                     COMPREPLY=( $(compgen -W "bash zsh fish" -- \${cur}) )
+                    ;;
+                cc)
+                    COMPREPLY=( $(compgen -W "install update upgrade version" -- \${cur}) )
                     ;;
                 *)
                     COMPREPLY=()
@@ -117,11 +120,14 @@ _cccli() {
         'active:激活指定配置'
         'list:列出所有配置'
         'get:查看配置详情'
+        'test:测试配置连通性'
+        'cc:Claude Code 管理'
         'env:查看环境变量配置'
         'proxy:设置代理环境变量'
         'completion:生成 Shell 补全脚本'
         'q:快速配置环境'
         'unset:删除指定配置'
+        'upgrade:更新到最新版本'
         'help:显示帮助信息'
         '?:显示帮助信息'
     )
@@ -138,7 +144,7 @@ _cccli() {
             ;;
         config)
             case $line[1] in
-                set|get|active|unset)
+                set|get|active|unset|test)
                     local -a configs
                     configs=(
 ${configsArray}
@@ -158,6 +164,9 @@ ${configsArray}
                     ;;
                 completion)
                     _values 'shell' 'bash' 'zsh' 'fish'
+                    ;;
+                cc)
+                    _values 'subcommand' 'install' 'update' 'upgrade' 'version'
                     ;;
             esac
             ;;
@@ -205,16 +214,19 @@ complete -c cccli -n '__fish_use_subcommand' -a 'set' -d '设置配置项'
 complete -c cccli -n '__fish_use_subcommand' -a 'active' -d '激活指定配置'
 complete -c cccli -n '__fish_use_subcommand' -a 'list' -d '列出所有配置'
 complete -c cccli -n '__fish_use_subcommand' -a 'get' -d '查看配置详情'
+complete -c cccli -n '__fish_use_subcommand' -a 'test' -d '测试配置连通性'
+complete -c cccli -n '__fish_use_subcommand' -a 'cc' -d 'Claude Code 管理'
 complete -c cccli -n '__fish_use_subcommand' -a 'env' -d '查看环境变量配置'
 complete -c cccli -n '__fish_use_subcommand' -a 'proxy' -d '设置代理环境变量'
 complete -c cccli -n '__fish_use_subcommand' -a 'completion' -d '生成 Shell 补全脚本'
 complete -c cccli -n '__fish_use_subcommand' -a 'q' -d '快速配置环境'
 complete -c cccli -n '__fish_use_subcommand' -a 'unset' -d '删除指定配置'
+complete -c cccli -n '__fish_use_subcommand' -a 'upgrade' -d '更新到最新版本'
 complete -c cccli -n '__fish_use_subcommand' -a 'help' -d '显示帮助信息'
 complete -c cccli -n '__fish_use_subcommand' -a '?' -d '显示帮助信息'
 
-# 配置名称补全 (set, get, active, unset)
-complete -c cccli -n '__fish_seen_subcommand_from set get active unset' -a '(cccli list 2>/dev/null | string replace "  - " "")' -d '配置名称'
+# 配置名称补全 (set, get, active, unset, test)
+complete -c cccli -n '__fish_seen_subcommand_from set get active unset test' -a '(cccli list 2>/dev/null | string replace "  - " "")' -d '配置名称'
 
 # unset 命令的 --force 补全
 complete -c cccli -n '__fish_seen_subcommand_from unset' -a '--force' -d '强制删除'
@@ -230,6 +242,12 @@ complete -c cccli -n '__fish_seen_subcommand_from proxy' -a 'http_proxy https_pr
 
 # completion 子命令补全
 complete -c cccli -n '__fish_seen_subcommand_from completion' -a 'bash zsh fish' -d 'Shell 类型'
+
+# cc 子命令补全
+complete -c cccli -n '__fish_seen_subcommand_from cc' -a 'install' -d '安装 Claude Code'
+complete -c cccli -n '__fish_seen_subcommand_from cc' -a 'update' -d '更新 Claude Code'
+complete -c cccli -n '__fish_seen_subcommand_from cc' -a 'upgrade' -d '升级 Claude Code'
+complete -c cccli -n '__fish_seen_subcommand_from cc' -a 'version' -d '查看 Claude Code 版本'
 
 # set 命令的 key 补全
 complete -c cccli -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_AUTH_TOKEN' -d '认证令牌'

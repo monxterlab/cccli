@@ -42,16 +42,22 @@ function showUsage(): void {
   console.log('快速配置环境命令');
   console.log('');
   console.log('用法:');
-  console.log('  cccli q <template_name> <auth_key>    根据模板快速创建配置');
-  console.log('  cccli q --list                         列出所有可用模板');
-  console.log('  cccli q --init                         初始化默认模板配置');
-  console.log('  cccli q --init --force                 强制覆盖现有配置');
+  console.log('  cccli q <template_name> <auth_key> [model]  根据模板快速创建配置');
+  console.log('  cccli q --list                               列出所有可用模板');
+  console.log('  cccli q --init                               初始化默认模板配置');
+  console.log('  cccli q --init --force                       强制覆盖现有配置');
   console.log('');
   console.log('示例:');
   console.log('  cccli q kimi_coding sk-xxxxx');
   console.log('    相当于:');
   console.log('    cccli set kimi_coding ANTHROPIC_BASE_URL https://api.kimi.com/coding');
   console.log('    cccli set kimi_coding ANTHROPIC_AUTH_TOKEN sk-xxxxx');
+  console.log('');
+  console.log('  cccli q ali_coding sk-xxxxx claude-3-opus-20240229');
+  console.log('    相当于:');
+  console.log('    cccli set ali_coding ANTHROPIC_BASE_URL https://coding.dashscope.aliyuncs.com/apps/anthropic');
+  console.log('    cccli set ali_coding ANTHROPIC_AUTH_TOKEN sk-xxxxx');
+  console.log('    cccli set ali_coding ANTHROPIC_MODEL claude-3-opus-20240229');
   console.log('');
   console.log('可用模板:');
   listQuickConfigs();
@@ -189,10 +195,11 @@ export function quickCommand(args: string[]): void {
   if (args.length < 2) {
     console.error('错误: 参数不足');
     console.error('');
-    console.error('用法: cccli q <template_name> <auth_key>');
+    console.error('用法: cccli q <template_name> <auth_key> [model]');
     console.error('');
     console.error('示例:');
     console.error('  cccli q kimi_coding sk-xxxxx');
+    console.error('  cccli q ali_coding sk-xxxxx claude-3-opus-20240229');
     console.error('');
     console.error('可用模板:');
     listQuickConfigs();
@@ -201,6 +208,7 @@ export function quickCommand(args: string[]): void {
 
   const templateName = args[0];
   const authKey = args[1];
+  const model = args[2]; // 可选的模型参数
 
   // 检查模板是否存在
   if (!templateExists(templateName)) {
@@ -240,6 +248,12 @@ export function quickCommand(args: string[]): void {
     // 设置认证 key
     addConfigItem(templateName, template.authKey, authKey);
     console.log(`✅ 已设置: ${templateName}.${template.authKey} = ${maskSensitiveValue(authKey)}`);
+
+    // 如果提供了模型参数，设置 ANTHROPIC_MODEL
+    if (model) {
+      addConfigItem(templateName, 'ANTHROPIC_MODEL', model);
+      console.log(`✅ 已设置: ${templateName}.ANTHROPIC_MODEL = ${model}`);
+    }
 
     console.log('');
     console.log(`配置 "${templateName}" 已完成！`);
