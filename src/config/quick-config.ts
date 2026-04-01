@@ -11,6 +11,8 @@ const QUICK_CONFIG_FILE = path.join(CONFIG_DIR, 'quick-configs.json');
 export interface QuickConfigTemplate {
   baseUrl: string;
   authKey: 'ANTHROPIC_AUTH_TOKEN' | 'ANTHROPIC_API_KEY';
+  name?: string;   // 厂家名称，用于帮助用户识别
+  model?: string;  // 默认模型，用于设置 ANTHROPIC_MODEL
 }
 
 /**
@@ -29,38 +31,68 @@ export function getDefaultConfigs(): QuickConfigs {
       kimi_coding: {
         baseUrl: 'https://api.kimi.com/coding',
         authKey: 'ANTHROPIC_AUTH_TOKEN',
+        name: '月之暗面 (Kimi)',
+        model: 'kimi-k2.5',
       },
       kimi: {
         baseUrl: 'https://api.moonshot.cn/anthropic',
         authKey: 'ANTHROPIC_AUTH_TOKEN',
+        name: '月之暗面 (Moonshot)',
+        model: 'kimi-k2.5',
       },
       ali_coding: {
         baseUrl: 'https://coding.dashscope.aliyuncs.com/apps/anthropic',
         authKey: 'ANTHROPIC_AUTH_TOKEN',
+        name: '阿里云 (通义千问)',
+        model: 'qwen3.5-plus',
       },
       poe: {
         baseUrl: 'https://api.poe.com',
         authKey: 'ANTHROPIC_API_KEY',
+        name: 'Poe (Quora)',
+        model: 'claude-opus-4.6',
       },
       zai: {
         baseUrl: 'https://open.bigmodel.cn/api/anthropic',
         authKey: 'ANTHROPIC_API_KEY',
+        name: '智谱AI (GLM)',
+        model: 'glm-5',
       },
       zai_coding: {
         baseUrl: 'https://open.bigmodel.cn/api/anthropic',
         authKey: 'ANTHROPIC_AUTH_TOKEN',
+        name: '智谱AI (GLM)',
+        model: 'glm-5',
       },
       minimax: {
         baseUrl: 'https://api.minimaxi.com/anthropic',
         authKey: 'ANTHROPIC_API_KEY',
+        name: 'MiniMax',
+        model: 'MiniMax-M2.7',
       },
       minimax_coding: {
         baseUrl: 'https://api.minimaxi.com/anthropic',
         authKey: 'ANTHROPIC_AUTH_TOKEN',
+        name: 'MiniMax',
+        model: 'MiniMax-M2.7',
       },
       ark: {
         baseUrl: 'https://ark.cn-beijing.volces.com/api/compatible',
         authKey: 'ANTHROPIC_AUTH_TOKEN',
+        name: '火山引擎 (字节跳动)',
+        model: 'doubao-seed-2-0-pro-260215',
+      },
+      mimo: {
+        baseUrl: 'https://api.xiaomimimo.com/anthropic/v1/messages',
+        authKey: 'ANTHROPIC_AUTH_TOKEN',
+        name: '小米 (MiMo)',
+        model: 'mimo-v2-pro',
+      },
+      step_coding: {
+        baseUrl: 'https://api.stepfun.com/step_plan',
+        authKey: 'ANTHROPIC_AUTH_TOKEN',
+        name: '阶跃星辰 (StepFun)',
+        model: 'step-3.5-flash',
       },
     },
   };
@@ -163,10 +195,15 @@ export function listQuickConfigs(): void {
     return;
   }
 
-  templates.forEach(([name, template]) => {
-    console.log(`  ${name}:`);
+  templates.forEach(([key, template]) => {
+    const displayName = template.name || key;
+    console.log(`  ${key}:`);
+    console.log(`    厂家: ${displayName}`);
     console.log(`    baseUrl: ${template.baseUrl}`);
     console.log(`    authKey: ${template.authKey}`);
+    if (template.model) {
+      console.log(`    默认模型: ${template.model}`);
+    }
   });
 }
 

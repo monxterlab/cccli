@@ -16,6 +16,7 @@ import { upgradeCommand } from './commands/upgrade';
 import { exportCommand } from './commands/export';
 import { testCommand } from './commands/test';
 import { ccCommand } from './commands/cc';
+import { skillsCommand } from './commands/skills';
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
@@ -85,14 +86,19 @@ async function main(): Promise<void> {
       await ccCommand(commandArgs);
       break;
 
+    case 'skills':
+      await skillsCommand(commandArgs);
+      break;
+
     case 'upgrade':
+    case 'update':
       await upgradeCommand();
       break;
 
     default:
       console.error(`错误: 未知命令 "${command}"`);
       console.error('');
-      console.error('可用命令: set, active, list, get, env, proxy, completion, q, unset, export, upgrade, test, cc, help');
+      console.error('可用命令: set, active, list, get, env, proxy, completion, q, unset, export, upgrade, update, test, cc, skills, help');
       console.error('运行 "cccli help" 或 "cccli ?" 查看详细帮助');
       process.exit(1);
   }

@@ -88,19 +88,19 @@ cccli q --init
 
 ```bash
 # 使用快捷模板创建配置
-cccli q zhhipu your-zhipu-api-key
+cccli q zai your-zhipu-api-key
 ```
 
 #### 3. 激活配置
 
 ```bash
-cccli active zhhipu
+cccli active zai
 ```
 
 #### 4. 验证配置
 
 ```bash
-cccli get zhhipu
+cccli get zai
 ```
 
 ### 命令参考
@@ -110,10 +110,10 @@ cccli get zhhipu
 | 命令 | 说明 | 示例 |
 |------|------|------|
 | `list` | 列出所有配置 | `cccli list` |
-| `get <name>` | 查看指定配置详情 | `cccli get zhhipu` |
+| `get <name>` | 查看指定配置详情 | `cccli get zai` |
 | `set <name> <key> <value>` | 设置配置项（支持Key快捷） | `cccli set myconfig TOKEN sk-xxxxx` |
-| `unset <name> [key]` | 删除配置或配置项 | `cccli unset zhhipu` |
-| `active <name>` | 激活指定配置 | `cccli active zhhipu` |
+| `unset <name> [key]` | 删除配置或配置项 | `cccli unset zai` |
+| `active <name>` | 激活指定配置 | `cccli active zai` |
 
 #### 测试命令
 
@@ -148,30 +148,33 @@ cccli get zhhipu
 
 | 命令 | 说明 | 示例 |
 |------|------|------|
-| `proxy <name> <url>` | 为配置设置代理 | `cccli proxy zhhipu http://127.0.0.1:7890` |
-| `env <name> <key> <value>` | 设置环境变量 | `cccli env zhhipu HTTP_PROXY http://proxy.com` |
+| `proxy <name> <url>` | 为配置设置代理 | `cccli proxy zai http://127.0.0.1:7890` |
+| `env <name> <key> <value>` | 设置环境变量 | `cccli env zai HTTP_PROXY http://proxy.com` |
 
 #### 系统命令
 
 | 命令 | 说明 |
 |------|------|
 | `upgrade` | 升级工具到最新版本 |
+| `update` | 同 upgrade |
 | `--version` | 显示版本信息 |
 | `--help` | 显示帮助信息 |
 
 ### 可用模板
 
-| 模板名称 | 服务提供商 | 基础 URL |
-|----------|----------|----------|
-| `kimi_coding` | Kimi | https://api.kimi.com/coding |
-| `kimi` | Moonshot | https://api.moonshot.cn/anthropic |
-| `ali_coding` | 阿里云 | https://coding.dashscope.aliyuncs.com/apps/anthropic |
-| `poe` | Poe | https://api.poe.com |
-| `zai` | 智谱AI | https://open.bigmodel.cn/api/anthropic |
-| `zai_coding` | 智谱AI Coding | https://open.bigmodel.cn/api/anthropic |
-| `minimax` | MiniMax | https://api.minimaxi.com/anthropic |
-| `minimax_coding` | MiniMax Coding | https://api.minimaxi.com/anthropic |
-| `ark` | 火山方舟 | https://ark.cn-beijing.volces.com/api/compatible |
+| 模板名称 | 服务提供商 | 基础 URL | 默认模型 |
+|----------|----------|----------|----------|
+| `kimi_coding` | 月之暗面 (Kimi) | https://api.kimi.com/coding | kimi-k2.5 |
+| `kimi` | 月之暗面 (Moonshot) | https://api.moonshot.cn/anthropic | kimi-k2.5 |
+| `ali_coding` | 阿里云 (通义千问) | https://coding.dashscope.aliyuncs.com/apps/anthropic | qwen3.5-plus |
+| `poe` | Poe (Quora) | https://api.poe.com | claude-opus-4.6 |
+| `zai` | 智谱AI (GLM) | https://open.bigmodel.cn/api/anthropic | glm-5 |
+| `zai_coding` | 智谱AI (GLM) | https://open.bigmodel.cn/api/anthropic | glm-5 |
+| `minimax` | MiniMax | https://api.minimaxi.com/anthropic | MiniMax-M2.7 |
+| `minimax_coding` | MiniMax | https://api.minimaxi.com/anthropic | MiniMax-M2.7 |
+| `ark` | 火山引擎 (字节跳动) | https://ark.cn-beijing.volces.com/api/compatible | doubao-seed-2-0-pro-260215 |
+| `mimo` | 小米 (MiMo) | https://api.xiaomimimo.com/anthropic/v1/messages | mimo-v2-pro |
+| `step_coding` | 阶跃星辰 (StepFun) | https://api.stepfun.com/step_plan | step-3.5-flash |
 
 ### 配置文件位置
 
@@ -184,8 +187,8 @@ cccli get zhhipu
 
 ```bash
 # 配置 Kimi
-cccli q kimi sk-kimi-api-key
-cccli active kimi
+cccli q kimi_coding sk-kimi-api-key
+cccli active kimi_coding
 
 # 切换到智谱AI
 cccli q zai sk-zhipu-api-key
@@ -194,6 +197,14 @@ cccli active zai
 # 使用模型参数创建配置
 cccli q ali_coding sk-xxxxx claude-3-opus-20240229
 cccli active ali_coding
+
+# 配置小米 MiMo
+cccli q mimo sk-mimo-api-key
+cccli active mimo
+
+# 配置阶跃星辰
+cccli q step_coding sk-step-api-key
+cccli active step_coding
 ```
 
 #### 场景 2：测试配置连通性
@@ -402,19 +413,19 @@ cccli q --init
 
 ```bash
 # Create configuration using quick template
-cccli q zhhipu your-zhipu-api-key
+cccli q zai your-zhipu-api-key
 ```
 
 #### 3. Activate configuration
 
 ```bash
-cccli active zhhipu
+cccli active zai
 ```
 
 #### 4. Verify configuration
 
 ```bash
-cccli get zhhipu
+cccli get zai
 ```
 
 ### Command Reference
@@ -424,10 +435,10 @@ cccli get zhhipu
 | Command | Description | Example |
 |---------|-------------|---------|
 | `list` | List all configurations | `cccli list` |
-| `get <name>` | View configuration details | `cccli get zhhipu` |
+| `get <name>` | View configuration details | `cccli get zai` |
 | `set <name> <key> <value>` | Set configuration item (supports key shortcuts) | `cccli set myconfig TOKEN sk-xxxxx` |
-| `unset <name> [key]` | Delete configuration or item | `cccli unset zhhipu` |
-| `active <name>` | Activate specified configuration | `cccli active zhhipu` |
+| `unset <name> [key]` | Delete configuration or item | `cccli unset zai` |
+| `active <name>` | Activate specified configuration | `cccli active zai` |
 
 #### Test Command
 
@@ -462,30 +473,33 @@ cccli get zhhipu
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `proxy <name> <url>` | Set proxy for configuration | `cccli proxy zhhipu http://127.0.0.1:7890` |
-| `env <name> <key> <value>` | Set environment variable | `cccli env zhhipu HTTP_PROXY http://proxy.com` |
+| `proxy <name> <url>` | Set proxy for configuration | `cccli proxy zai http://127.0.0.1:7890` |
+| `env <name> <key> <value>` | Set environment variable | `cccli env zai HTTP_PROXY http://proxy.com` |
 
 #### System Commands
 
 | Command | Description |
 |---------|-------------|
 | `upgrade` | Upgrade tool to latest version |
+| `update` | Same as upgrade |
 | `--version` | Show version information |
 | `--help` | Show help information |
 
 ### Available Templates
 
-| Template Name | Service Provider | Base URL |
-|---------------|------------------|----------|
-| `kimi_coding` | Kimi | https://api.kimi.com/coding |
-| `kimi` | Moonshot | https://api.moonshot.cn/anthropic |
-| `ali_coding` | Alibaba Cloud | https://coding.dashscope.aliyuncs.com/apps/anthropic |
-| `poe` | Poe | https://api.poe.com |
-| `zai` | Zhipu AI | https://open.bigmodel.cn/api/anthropic |
-| `zai_coding` | Zhipu AI Coding | https://open.bigmodel.cn/api/anthropic |
-| `minimax` | MiniMax | https://api.minimaxi.com/anthropic |
-| `minimax_coding` | MiniMax Coding | https://api.minimaxi.com/anthropic |
-| `ark` | Volcano Ark | https://ark.cn-beijing.volces.com/api/compatible |
+| Template Name | Service Provider | Base URL | Default Model |
+|---------------|------------------|----------|---------------|
+| `kimi_coding` | Moonshot (Kimi) | https://api.kimi.com/coding | kimi-k2.5 |
+| `kimi` | Moonshot | https://api.moonshot.cn/anthropic | kimi-k2.5 |
+| `ali_coding` | Alibaba Cloud (Qwen) | https://coding.dashscope.aliyuncs.com/apps/anthropic | qwen3.5-plus |
+| `poe` | Poe (Quora) | https://api.poe.com | claude-opus-4.6 |
+| `zai` | Zhipu AI (GLM) | https://open.bigmodel.cn/api/anthropic | glm-5 |
+| `zai_coding` | Zhipu AI (GLM) | https://open.bigmodel.cn/api/anthropic | glm-5 |
+| `minimax` | MiniMax | https://api.minimaxi.com/anthropic | MiniMax-M2.7 |
+| `minimax_coding` | MiniMax | https://api.minimaxi.com/anthropic | MiniMax-M2.7 |
+| `ark` | Volcano Engine (ByteDance) | https://ark.cn-beijing.volces.com/api/compatible | doubao-seed-2-0-pro-260215 |
+| `mimo` | Xiaomi (MiMo) | https://api.xiaomimimo.com/anthropic/v1/messages | mimo-v2-pro |
+| `step_coding` | StepFun | https://api.stepfun.com/step_plan | step-3.5-flash |
 
 ### Configuration File Location
 
@@ -498,12 +512,20 @@ cccli get zhhipu
 
 ```bash
 # Configure Kimi
-cccli q kimi sk-kimi-api-key
-cccli active kimi
+cccli q kimi_coding sk-kimi-api-key
+cccli active kimi_coding
 
 # Switch to Zhipu AI
 cccli q zai sk-zhipu-api-key
 cccli active zai
+
+# Configure Xiaomi MiMo
+cccli q mimo sk-mimo-api-key
+cccli active mimo
+
+# Configure StepFun
+cccli q step_coding sk-step-api-key
+cccli active step_coding
 ```
 
 #### Scenario 2: Test configuration connectivity

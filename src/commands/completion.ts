@@ -22,7 +22,7 @@ _cccli_completion() {
     prev="\${COMP_WORDS[COMP_CWORD-1]}"
 
     # 主命令列表
-    local commands="set active list get env proxy help completion q unset test upgrade cc ?"
+    local commands="set active list get env proxy help completion q unset test upgrade update cc skills ?"
 
     # 配置名称列表
     local configs="${configs}"
@@ -57,6 +57,9 @@ _cccli_completion() {
                     ;;
                 cc)
                     COMPREPLY=( $(compgen -W "install update upgrade version" -- \${cur}) )
+                    ;;
+                skills)
+                    COMPREPLY=( $(compgen -W "--list -l list --remove -r" -- \${cur}) )
                     ;;
                 *)
                     COMPREPLY=()
@@ -122,12 +125,14 @@ _cccli() {
         'get:查看配置详情'
         'test:测试配置连通性'
         'cc:Claude Code 管理'
+        'skills:列出所有 skills'
         'env:查看环境变量配置'
         'proxy:设置代理环境变量'
         'completion:生成 Shell 补全脚本'
         'q:快速配置环境'
         'unset:删除指定配置'
         'upgrade:更新到最新版本'
+        'update:同 upgrade'
         'help:显示帮助信息'
         '?:显示帮助信息'
     )
@@ -167,6 +172,9 @@ ${configsArray}
                     ;;
                 cc)
                     _values 'subcommand' 'install' 'update' 'upgrade' 'version'
+                    ;;
+                skills)
+                    _values 'skills options' '--list' '-l' 'list' '--remove' '-r'
                     ;;
             esac
             ;;
@@ -216,12 +224,14 @@ complete -c cccli -n '__fish_use_subcommand' -a 'list' -d '列出所有配置'
 complete -c cccli -n '__fish_use_subcommand' -a 'get' -d '查看配置详情'
 complete -c cccli -n '__fish_use_subcommand' -a 'test' -d '测试配置连通性'
 complete -c cccli -n '__fish_use_subcommand' -a 'cc' -d 'Claude Code 管理'
+complete -c cccli -n '__fish_use_subcommand' -a 'skills' -d '列出所有 skills'
 complete -c cccli -n '__fish_use_subcommand' -a 'env' -d '查看环境变量配置'
 complete -c cccli -n '__fish_use_subcommand' -a 'proxy' -d '设置代理环境变量'
 complete -c cccli -n '__fish_use_subcommand' -a 'completion' -d '生成 Shell 补全脚本'
 complete -c cccli -n '__fish_use_subcommand' -a 'q' -d '快速配置环境'
 complete -c cccli -n '__fish_use_subcommand' -a 'unset' -d '删除指定配置'
 complete -c cccli -n '__fish_use_subcommand' -a 'upgrade' -d '更新到最新版本'
+complete -c cccli -n '__fish_use_subcommand' -a 'update' -d '同 upgrade'
 complete -c cccli -n '__fish_use_subcommand' -a 'help' -d '显示帮助信息'
 complete -c cccli -n '__fish_use_subcommand' -a '?' -d '显示帮助信息'
 
@@ -248,6 +258,16 @@ complete -c cccli -n '__fish_seen_subcommand_from cc' -a 'install' -d '安装 Cl
 complete -c cccli -n '__fish_seen_subcommand_from cc' -a 'update' -d '更新 Claude Code'
 complete -c cccli -n '__fish_seen_subcommand_from cc' -a 'upgrade' -d '升级 Claude Code'
 complete -c cccli -n '__fish_seen_subcommand_from cc' -a 'version' -d '查看 Claude Code 版本'
+
+# skills 子命令补全
+complete -c cccli -n '__fish_seen_subcommand_from skills' -a '--list' -d '列出所有 skills'
+complete -c cccli -n '__fish_seen_subcommand_from skills' -a '-l' -d '列出所有 skills'
+complete -c cccli -n '__fish_seen_subcommand_from skills' -a 'list' -d '列出所有 skills'
+complete -c cccli -n '__fish_seen_subcommand_from skills' -a '--remove' -d '删除指定 skill'
+complete -c cccli -n '__fish_seen_subcommand_from skills' -a '-r' -d '删除指定 skill'
+
+# skills --remove/-r 后面补全 skill 名称
+complete -c cccli -n '__fish_seen_subcommand_from skills; and __fish_seen_subcommand_from --remove -r' -a '(cccli skills --list 2>/dev/null | grep "^  - " | string replace "  - " "" | string replace "    描述:.*" "")' -d 'skill 名称'
 
 # set 命令的 key 补全
 complete -c cccli -n '__fish_seen_subcommand_from set' -a 'ANTHROPIC_AUTH_TOKEN' -d '认证令牌'

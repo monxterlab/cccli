@@ -47,17 +47,23 @@ function showUsage(): void {
   console.log('  cccli q --init                               初始化默认模板配置');
   console.log('  cccli q --init --force                       强制覆盖现有配置');
   console.log('');
+  console.log('说明:');
+  console.log('  - 模板会自动设置 ANTHROPIC_BASE_URL 和认证密钥');
+  console.log('  - 如果模板有默认模型，会自动设置 ANTHROPIC_MODEL');
+  console.log('  - 可通过第三个参数指定模型覆盖默认模型');
+  console.log('');
   console.log('示例:');
   console.log('  cccli q kimi_coding sk-xxxxx');
   console.log('    相当于:');
   console.log('    cccli set kimi_coding ANTHROPIC_BASE_URL https://api.kimi.com/coding');
   console.log('    cccli set kimi_coding ANTHROPIC_AUTH_TOKEN sk-xxxxx');
+  console.log('    cccli set kimi_coding ANTHROPIC_MODEL claude-3-5-sonnet-20241022 (默认模型)');
   console.log('');
   console.log('  cccli q ali_coding sk-xxxxx claude-3-opus-20240229');
   console.log('    相当于:');
   console.log('    cccli set ali_coding ANTHROPIC_BASE_URL https://coding.dashscope.aliyuncs.com/apps/anthropic');
   console.log('    cccli set ali_coding ANTHROPIC_AUTH_TOKEN sk-xxxxx');
-  console.log('    cccli set ali_coding ANTHROPIC_MODEL claude-3-opus-20240229');
+  console.log('    cccli set ali_coding ANTHROPIC_MODEL claude-3-opus-20240229 (覆盖默认模型)');
   console.log('');
   console.log('可用模板:');
   listQuickConfigs();
@@ -76,11 +82,14 @@ function interactiveSelect(): void {
   }
 
   console.log('可用的快捷配置模板:');
-  templates.forEach(([name, template], index) => {
-    console.log(`  ${index + 1}. ${name}`);
+  templates.forEach(([key, template], index) => {
+    const displayName = template.name || key;
+    console.log(`  ${index + 1}. ${key} (${displayName})`);
     console.log(`     ${template.baseUrl}`);
   });
 
+  console.log('');
+  console.log('  0. 取消选择');
   console.log('');
 
   // 使用简单的readline实现交互
@@ -93,15 +102,23 @@ function interactiveSelect(): void {
   rl.question('请选择模板名称 (输入数字或名称): ', (input: string) => {
     rl.close();
 
+    const trimmedInput = input.trim();
+
+    // 检查是否选择取消
+    if (trimmedInput === '0') {
+      console.log('已取消选择');
+      return;
+    }
+
     let templateName: string;
 
     // 尝试解析数字选择
-    const numInput = parseInt(input.trim());
+    const numInput = parseInt(trimmedInput);
     if (!isNaN(numInput) && numInput >= 1 && numInput <= templates.length) {
       templateName = templates[numInput - 1][0];
     } else {
       // 直接使用输入的名称
-      templateName = input.trim();
+      templateName = trimmedInput;
     }
 
     // 检查模板是否存在
@@ -118,8 +135,13 @@ function interactiveSelect(): void {
     }
 
     // 提示输入API密钥
-    rl.question(`请输入 ${templateName} 的 API 密钥: `, (authKey: string) => {
-      rl.close();
+    const rl2 = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+
+    rl2.question(`请输入 ${templateName} 的 API 密钥: `, (authKey: string) => {
+      rl2.close();
 
       if (!authKey.trim()) {
         console.error('错误: API密钥不能为空');
@@ -144,6 +166,12 @@ function interactiveSelect(): void {
         // 设置认证 key
         addConfigItem(templateName, template.authKey, authKey);
         console.log(`✅ 已设置: ${templateName}.${template.authKey} = ${maskSensitiveValue(authKey)}`);
+
+        // 如果模板有默认模型，设置 ANTHROPIC_MODEL
+        if (template.model) {
+          addConfigItem(templateName, 'ANTHROPIC_MODEL', template.model);
+          console.log(`✅ 已设置: ${templateName}.ANTHROPIC_MODEL = ${template.model}`);
+        }
 
         console.log('');
         console.log(`配置 "${templateName}" 已完成！`);
@@ -249,10 +277,11 @@ export function quickCommand(args: string[]): void {
     addConfigItem(templateName, template.authKey, authKey);
     console.log(`✅ 已设置: ${templateName}.${template.authKey} = ${maskSensitiveValue(authKey)}`);
 
-    // 如果提供了模型参数，设置 ANTHROPIC_MODEL
-    if (model) {
-      addConfigItem(templateName, 'ANTHROPIC_MODEL', model);
-      console.log(`✅ 已设置: ${templateName}.ANTHROPIC_MODEL = ${model}`);
+    // 设置模型：优先使用用户指定的模型，其次使用模板默认模型
+    const finalModel = model || template.model;
+    if (finalModel) {
+      addConfigItem(templateName, 'ANTHROPIC_MODEL', finalModel);
+      console.log(`✅ 已设置: ${templateName}.ANTHROPIC_MODEL = ${finalModel}`);
     }
 
     console.log('');

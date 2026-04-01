@@ -15,6 +15,10 @@ export function helpCommand(): void {
   console.log('              update                       更新 Claude Code');
   console.log('              upgrade                      升级 Claude Code');
   console.log('              version                      查看 Claude Code 版本');
+  console.log('  skills      --list                       列出所有 skills');
+  console.log('              -l 或 list                   系统级和项目级 skills');
+  console.log('              --remove <name>              删除指定 skill');
+  console.log('              -r <name>                    同上，同名多个时需选择');
   console.log('  env         [proxy]                      查看环境变量配置');
   console.log('  proxy       <proxy_name> <proxy_value>   设置代理环境变量');
   console.log('              --unset <proxy_name>         清除代理环境变量');
@@ -27,6 +31,7 @@ export function helpCommand(): void {
   console.log('  export      [json]                     导出配置为JSON格式');
   console.log('  unset       <config_name> [--force]      删除指定配置');
   console.log('  upgrade                                  更新到最新版本');
+  console.log('  update                                   同 upgrade');
   console.log('  help 或 ?                                显示帮助信息');
   console.log('');
   console.log('示例:');
@@ -42,12 +47,17 @@ export function helpCommand(): void {
   console.log('  cccli cc update');
   console.log('  cccli cc upgrade');
   console.log('  cccli cc version');
+  console.log('  cccli skills --list');
+  console.log('  cccli skills -l');
+  console.log('  cccli skills -r google-trends');
   console.log('  cccli env');
   console.log('  cccli env proxy');
   console.log('  cccli proxy http_proxy http://127.0.0.1:18080');
   console.log('  cccli proxy --unset http_proxy');
   console.log('  cccli q kimi_coding sk-xxxxx');
   console.log('  cccli q ali_coding sk-xxxxx claude-3-opus-20240229');
+  console.log('  cccli q mimo sk-xxxxx');
+  console.log('  cccli q step_coding sk-xxxxx');
   console.log('  cccli q --list');
   console.log('  cccli q --init --force');
   console.log('  cccli export json');
