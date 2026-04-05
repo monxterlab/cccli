@@ -1,5 +1,6 @@
 import { listConfigs } from '../config/storage';
 import { getTemplateNames } from '../config/quick-config';
+import { listRouterConfigs } from '../config/router-storage';
 
 /**
  * 生成 Bash 补全脚本
@@ -7,6 +8,8 @@ import { getTemplateNames } from '../config/quick-config';
 function generateBashCompletion(): string {
   const configs = listConfigs().join(' ');
   const templates = getTemplateNames().join(' ');
+  const routers = listRouterConfigs().map(r => r.name).join(' ');
+  const urlShortcuts = 'openai kimi moonshot zhipu glm dashscope ali aliyun minimax poe volcengine ark huoshan stepfun step deepseek baidu qianfan siliconflow xinference ollama lmstudio vllm textgen';
 
   return `# cccli Bash Completion
 # 安装方法:
@@ -22,13 +25,16 @@ _cccli_completion() {
     prev="\${COMP_WORDS[COMP_CWORD-1]}"
 
     # 主命令列表
-    local commands="set active list get env proxy help completion q unset test upgrade update cc skills ?"
+    local commands="set active list get env proxy help completion q unset test upgrade update cc skills router ?"
 
     # 配置名称列表
     local configs="${configs}"
 
     # 模板列表
     local templates="${templates}"
+
+    # 路由列表
+    local routers="${routers}"
 
     case \${COMP_CWORD} in
         1)
@@ -61,6 +67,9 @@ _cccli_completion() {
                 skills)
                     COMPREPLY=( $(compgen -W "--list -l list --remove -r" -- \${cur}) )
                     ;;
+                router)
+                    COMPREPLY=( $(compgen -W "start stop restart status list remove -n --name -u --url -k --key -p --port" -- \${cur}) )
+                    ;;
                 *)
                     COMPREPLY=()
                     ;;
@@ -81,6 +90,44 @@ _cccli_completion() {
                 unset)
                     # unset 命令的 --force 补全
                     COMPREPLY=( $(compgen -W "--force" -- \${cur}) )
+                    ;;
+                router)
+                    # router 命令的子命令补全（start/stop/restart/status/remove 后的路由名称）
+                    local router_subcmd="\${COMP_WORDS[2]}"
+                    case "\${router_subcmd}" in
+                        start|stop|restart|remove)
+                            COMPREPLY=( $(compgen -W "${routers}" -- \${cur}) )
+                            ;;
+                        -u|--url)
+                            COMPREPLY=( $(compgen -W "${urlShortcuts}" -- \${cur}) )
+                            ;;
+                        *)
+                            COMPREPLY=()
+                            ;;
+                    esac
+                    ;;
+                *)
+                    COMPREPLY=()
+                    ;;
+            esac
+            ;;
+        4)
+            # 第四个参数
+            local cmd="\${COMP_WORDS[1]}"
+            case \${cmd} in
+                router)
+                    local prev_arg="\${COMP_WORDS[COMP_CWORD-1]}"
+                    case "\${prev_arg}" in
+                        -u|--url)
+                            COMPREPLY=( $(compgen -W "${urlShortcuts}" -- \${cur}) )
+                            ;;
+                        start|stop|restart|remove)
+                            COMPREPLY=( $(compgen -W "${routers}" -- \${cur}) )
+                            ;;
+                        *)
+                            COMPREPLY=()
+                            ;;
+                    esac
                     ;;
                 *)
                     COMPREPLY=()
@@ -103,6 +150,7 @@ complete -F _cccli_completion cccli
 function generateZshCompletion(): string {
   const configs = listConfigs();
   const configsArray = configs.map(c => `        "${c}"`).join('\n');
+  const urlShortcuts = 'openai kimi moonshot zhipu glm dashscope ali aliyun minimax poe volcengine ark huoshan stepfun step deepseek baidu qianfan siliconflow xinference ollama lmstudio vllm textgen';
 
   return `# cccli Zsh Completion
 # 安装方法:
@@ -133,6 +181,7 @@ _cccli() {
         'unset:删除指定配置'
         'upgrade:更新到最新版本'
         'update:同 upgrade'
+        'router:API 路由服务'
         'help:显示帮助信息'
         '?:显示帮助信息'
     )
@@ -176,6 +225,9 @@ ${configsArray}
                 skills)
                     _values 'skills options' '--list' '-l' 'list' '--remove' '-r'
                     ;;
+                router)
+                    _values 'router options' 'start' 'stop' 'restart' 'status' 'list' 'remove' '-n[路由名称]' '--name[路由名称]' '-u[上游 URL 或快捷方式]' '--url[上游 URL 或快捷方式]' '-k[API Key]' '--key[API Key]' '-p[监听端口]' '--port[监听端口]'
+                    ;;
             esac
             ;;
         key)
@@ -198,6 +250,23 @@ ${configsArray}
                 unset)
                     _values 'unset options' '--force'
                     ;;
+                router)
+                    case $line[2] in
+                        -u|--url)
+                            _values 'router url shortcuts' ${urlShortcuts}
+                            ;;
+                    esac
+                    ;;
+            esac
+            ;;
+        router)
+            # router 命令的子命令
+            case $line[2] in
+                start|stop|restart|remove)
+                    local -a routers
+                    routers=(${listRouterConfigs().map(r => `"${r.name}"`).join(' ')})
+                    _describe -t routers 'routers' routers
+                    ;;
             esac
             ;;
     esac
@@ -211,6 +280,7 @@ _cccli "$@"
  * 生成 Fish 补全脚本
  */
 function generateFishCompletion(): string {
+  const urlShortcuts = 'openai kimi moonshot zhipu glm dashscope ali aliyun minimax poe volcengine ark huoshan stepfun step deepseek baidu qianfan siliconflow xinference ollama lmstudio vllm textgen';
   return `# cccli Fish Completion
 # 安装方法:
 #   1. 将以下内容添加到 ~/.config/fish/completions/cccli.fish:
@@ -232,8 +302,24 @@ complete -c cccli -n '__fish_use_subcommand' -a 'q' -d '快速配置环境'
 complete -c cccli -n '__fish_use_subcommand' -a 'unset' -d '删除指定配置'
 complete -c cccli -n '__fish_use_subcommand' -a 'upgrade' -d '更新到最新版本'
 complete -c cccli -n '__fish_use_subcommand' -a 'update' -d '同 upgrade'
+complete -c cccli -n '__fish_use_subcommand' -a 'router' -d 'API 路由服务'
 complete -c cccli -n '__fish_use_subcommand' -a 'help' -d '显示帮助信息'
 complete -c cccli -n '__fish_use_subcommand' -a '?' -d '显示帮助信息'
+
+# router 子命令补全
+complete -c cccli -n '__fish_seen_subcommand_from router' -a 'start' -d '启动路由服务'
+complete -c cccli -n '__fish_seen_subcommand_from router' -a 'stop' -d '停止路由服务'
+complete -c cccli -n '__fish_seen_subcommand_from router' -a 'restart' -d '重启路由服务'
+complete -c cccli -n '__fish_seen_subcommand_from router' -a 'status' -d '查看路由状态'
+complete -c cccli -n '__fish_seen_subcommand_from router' -a 'list' -d '列出所有路由'
+complete -c cccli -n '__fish_seen_subcommand_from router' -a 'remove' -d '删除路由配置'
+complete -c cccli -n '__fish_seen_subcommand_from router' -s n -l name -d '路由名称'
+complete -c cccli -n '__fish_seen_subcommand_from router' -s u -l url -a '${urlShortcuts}' -d '上游 URL 或快捷方式'
+complete -c cccli -n '__fish_seen_subcommand_from router' -s k -l key -d 'OpenAI API Key'
+complete -c cccli -n '__fish_seen_subcommand_from router' -s p -l port -d '监听端口'
+
+# router start/remove 后面的路由名称补全
+complete -c cccli -n '__fish_seen_subcommand_from router; and __fish_seen_subcommand_from start stop restart remove' -a '(cccli router list 2>/dev/null | grep "^  " | string replace "  " "" | string split " " -f 1)' -d '路由名称'
 
 # 配置名称补全 (set, get, active, unset, test)
 complete -c cccli -n '__fish_seen_subcommand_from set get active unset test' -a '(cccli list 2>/dev/null | string replace "  - " "")' -d '配置名称'

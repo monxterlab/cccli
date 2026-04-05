@@ -94,6 +94,12 @@ export function getDefaultConfigs(): QuickConfigs {
         name: '阶跃星辰 (StepFun)',
         model: 'step-3.5-flash',
       },
+      local: {
+        baseUrl: 'http://localhost:3000',
+        authKey: 'ANTHROPIC_API_KEY',
+        name: '本地路由服务',
+        model: 'claude-3-5-sonnet-20241022',
+      },
     },
   };
 }
